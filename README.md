@@ -21,6 +21,14 @@ pip install git+https://github.com/engeir/plt-sane.git
 
 ## Usage
 
+### Functions
+
+* `dark_theme`
+* `log_tick_format`
+* `topside_legends`
+
+### Example use
+
 ```python
 import matplotlib
 import matplotlib.pyplot as plt
