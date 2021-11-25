@@ -10,27 +10,40 @@
 * Add and set up tests in pre-commit
 * Set up actions
 
+## Install
+
+```sh
+# Into poetry project
+poetry add git+https://github.com/engeir/plt-sane.git@main
+# With pip
+pip install git+https://github.com/engeir/plt-sane.git
+```
+
+## Usage
+
 ```python
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
 import plt_sane
-# import uit_scripts.plotting.figure_standards as fig_std
 
-# ax_size = fig_std.set_rcparams_dynamo(matplotlib.rcParams)
-fig = plt.figure()
 a = np.exp(np.linspace(-3, 5, 100))
-# ax = fig.add_axes(ax_size)
 base = 2  # Default is 10, but 2 works equally well
+plt.figure()
 # ax.loglog()
 # ax = log_tick_fix(ax, "both")
 # ax.semilogx(base=base)  # This is not needed. Re-sets in the formatter function
 plt_sane.log_tick_format(ax, "x", base=base)
 # ax.semilogy()
-# log_tick_fix(ax, "y")
+# plt_sane.log_tick_format(ax, "y")
 
 # Do plotting ...
 ax.plot(a)
+# If you do:
+# ax.semilogx(a)
+# the axis will be re-set, in which case you will have to run
+# plt_sane.log_tick_format(ax, "x", base=base)
+# again. (But just use plt.plot(), so much easier.)
 plt.show()
 ```
