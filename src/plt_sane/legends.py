@@ -1,3 +1,5 @@
+"""Manipulate the legend of a matplotlib figure."""
+
 from typing import Any
 
 import matplotlib

@@ -1,3 +1,5 @@
+"""Manipulate the axis of matplotlib figures."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import ticker
