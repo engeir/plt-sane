@@ -1,4 +1,4 @@
-from plt_sane.axes import *  # noqa:F401,F403
-from plt_sane.legends import *  # noqa:F401,F403
+from plastik.axes import *  # noqa:F401,F403
+from plastik.legends import *  # noqa:F401,F403
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plastik"
-version = "0.1.0"
+version = "0.2.0"
 description = "Sane defaults to matplotlib"
 authors = ["engeir <eirroleng@gmail.com>"]
 
