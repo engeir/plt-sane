@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "plastik"
 version = "0.2.0"
-description = "Sane defaults to matplotlib"
+description = "plastic surgery for plt"
 authors = ["engeir <eirroleng@gmail.com>"]
 
 [tool.poetry.dependencies]
