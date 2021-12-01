@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "plt-sane"
+name = "plastik"
 version = "0.1.0"
 description = "Sane defaults to matplotlib"
 authors = ["engeir <eirroleng@gmail.com>"]
