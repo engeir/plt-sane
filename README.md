@@ -14,9 +14,9 @@
 
 ```sh
 # Into poetry project
-poetry add git+https://github.com/engeir/plt-sane.git@main
+poetry add git+https://github.com/engeir/plastik.git@main
 # With pip
-pip install git+https://github.com/engeir/plt-sane.git
+pip install git+https://github.com/engeir/plastik.git
 ```
 
 ## Usage
