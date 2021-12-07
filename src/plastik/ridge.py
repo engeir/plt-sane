@@ -120,48 +120,44 @@ class Ridge:
             labelleft=False,
         )
 
-    def __resolve_options(self, i, spines, col) -> None:
-        if len(self.data) != 1:
-            if "z" in self.options:  # Squeeze
-                if i % 2:
-                    self.ax_objs[-1].tick_params(
-                        axis="y",
-                        which="both",
-                        left=False,
-                        labelleft=False,
-                        labelright=True,
-                    )
-                    self.ax_objs[-1].spines["left"].set_color("k")
-                else:
-                    self.ax_objs[-1].tick_params(
-                        axis="y",
-                        which="both",
-                        right=False,
-                        labelleft=True,
-                        labelright=False,
-                    )
-                    self.ax_objs[-1].spines["right"].set_color("k")
-            elif "s" in self.options:  # Slalom axis
-                if i % 2:
-                    self.ax_objs[-1].tick_params(
-                        axis="y", which="both", labelleft=False, labelright=True
-                    )
-            for sp in spines:
-                self.ax_objs[-1].spines[sp].set_visible(False)
-            if "z" not in self.options:  # Squeeze
-                self.ax_objs[-1].spines["left"].set_color(col)
-                self.ax_objs[-1].spines["right"].set_color(col)
-            self.ax_objs[-1].tick_params(axis="y", which="both", colors=col)
-            self.ax_objs[-1].yaxis.label.set_color(col)
+    def __z_option(self, i) -> None:
+        if i % 2:
+            self.ax_objs[-1].tick_params(
+                axis="y",
+                which="both",
+                left=False,
+                labelleft=False,
+                labelright=True,
+            )
+            self.ax_objs[-1].spines["left"].set_color("k")
+        else:
+            self.ax_objs[-1].tick_params(
+                axis="y",
+                which="both",
+                right=False,
+                labelleft=True,
+                labelright=False,
+            )
+            self.ax_objs[-1].spines["right"].set_color("k")
+
+    def __s_option(self, i) -> None:
+        if i % 2:
+            self.ax_objs[-1].tick_params(
+                axis="y", which="both", labelleft=False, labelright=True
+            )
+
+    def __g_option(self, i) -> None:
         if ("g" in self.options and "z" not in self.options) or (
             "g" in self.options and len(self.data) == 1
         ):
             plt.grid(True, which="major", ls="-", alpha=0.2)
-        elif "g" in self.options and "z" in self.options:
+        elif "g" in self.options:
             plt.minorticks_off()
             alpha = 0.2 if i in (0, len(self.data) - 1) else 0.1
             plt.grid(True, axis="y", which="major", ls=next(self.gls), alpha=0.2)
             plt.grid(True, axis="x", which="major", ls="-", alpha=alpha)
+
+    def __resolve_first_last_axis(self, i) -> None:
         if i == len(self.data) - 1:
             if self.xlabel:
                 plt.xlabel(self.xlabel)
@@ -176,6 +172,34 @@ class Ridge:
                 axis="x", which="both", bottom=False, top=False, labelbottom=False
             )
 
+    def __resolve_options(self, i, spines, col) -> None:
+        if len(self.data) != 1:
+            if "z" in self.options:  # Squeeze
+                self.__z_option(i)
+            elif "s" in self.options:  # Slalom axis
+                self.__s_option(i)
+            for sp in spines:
+                self.ax_objs[-1].spines[sp].set_visible(False)
+            if "z" not in self.options:  # Squeeze
+                self.ax_objs[-1].spines["left"].set_color(col)
+                self.ax_objs[-1].spines["right"].set_color(col)
+            self.ax_objs[-1].tick_params(axis="y", which="both", colors=col)
+            self.ax_objs[-1].yaxis.label.set_color(col)
+        self.__g_option(i)
+        self.__resolve_first_last_axis(i)
+
+    def __setup_axis(self, y_min, y_max, i, s) -> tuple[float, float, np.ndarray]:
+        self.ax_objs.append(self.__fig.add_subplot(self.gs[i : i + 1, 0:]))
+        if i == 0:
+            spines = ["bottom"]
+        elif i == len(self.data) - 1:
+            spines = ["top"]
+        else:
+            spines = ["top", "bottom"]
+        y_min = s[1].min() if s[1].min() < y_min else y_min
+        y_max = s[1].max() if s[1].max() > y_max else y_max
+        return y_min, y_max, s, spines
+
     def data_loop(self) -> tuple[float, float]:
         # Loop through data
         self.__lines = []
@@ -184,15 +208,7 @@ class Ridge:
         for i, s in enumerate(self.data):
             col = next(self.colors)
             # lnst = next(ls)
-            self.ax_objs.append(self.__fig.add_subplot(self.gs[i : i + 1, 0:]))
-            if i == 0:
-                spines = ["bottom"]
-            elif i == len(self.data) - 1:
-                spines = ["top"]
-            else:
-                spines = ["top", "bottom"]
-            y_min = s[1].min() if s[1].min() < y_min else y_min
-            y_max = s[1].max() if s[1].max() > y_max else y_max
+            y_min, y_max, s, spines = self.__setup_axis(y_min, y_max, i, s)
 
             # Plot data
             p_func = getattr(self.ax_objs[-1], self.pltype)
