@@ -2,7 +2,7 @@
 
 import itertools
 import attr
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import matplotlib.gridspec as grid_spec
 import matplotlib.pyplot as plt
@@ -40,7 +40,16 @@ class Ridge:
     pltype: str
         plt class (loglog, plot, semilogx etc.) Defaults to plot.
     """
-    data: list[Union[tuple[np.ndarray, np.ndarray], np.ndarray]] = attr.ib()
+
+    data: list[Any] = attr.ib()
+
+    @data.validator
+    def _check_data_type(self, attribute, value):
+        if not isinstance(value[0], tuple) and not isinstance(value[0], np.ndarray):
+            raise TypeError(
+                f"data must be a list of tuples or numpy arrays, not list of {type(self.data[0])}."
+            )
+
     options: str = attr.ib(converter=str)
     y_scale: float = attr.ib(converter=float, default=1.0)
     xlabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
@@ -65,7 +74,7 @@ class Ridge:
         # if "xlim" in kwargs.keys():
         #     x_min, x_max = kwargs["xlim"]
         if len(self.data[0]) != 2:
-            x_min, x_max = 0, len(self.data[0])
+            x_min, x_max = -0.5, len(self.data[0]) - 0.5
         elif "c" in self.options:
             x_min, x_max = self.__x_limit(False)
         else:
@@ -103,7 +112,6 @@ class Ridge:
             y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
             ylim = self.ylim or [y_min, y_max]
             self.ax.set_ylim(ylim)
-            # fig.text(0.01, 0.5, ylabel, ha='left', va='center', rotation='vertical')
 
     def __blank(self) -> None:
         spine = ["top", "bottom", "left", "right"]
@@ -188,7 +196,15 @@ class Ridge:
         self.__g_option(i)
         self.__resolve_first_last_axis(i)
 
-    def __setup_axis(self, y_min, y_max, i, s) -> tuple[float, float, np.ndarray]:
+    def __setup_axis(
+        self,
+        y_min: float,
+        y_max: float,
+        i: int,
+        s: Union[tuple[np.ndarray, np.ndarray], np.ndarray],
+    ) -> tuple[
+        float, float, Union[tuple[np.ndarray, np.ndarray], np.ndarray], list[str]
+    ]:
         self.ax_objs.append(self.__fig.add_subplot(self.gs[i : i + 1, 0:]))
         if i == 0:
             spines = ["bottom"]
@@ -196,8 +212,9 @@ class Ridge:
             spines = ["top"]
         else:
             spines = ["top", "bottom"]
-        y_min = s[1].min() if s[1].min() < y_min else y_min
-        y_max = s[1].max() if s[1].max() > y_max else y_max
+        s_ = s if isinstance(s, np.ndarray) else s[1]
+        y_min = s_.min() if s_.min() < y_min else y_min
+        y_max = s_.max() if s_.max() > y_max else y_max
         return y_min, y_max, s, spines
 
     def data_loop(self) -> tuple[float, float]:
@@ -305,9 +322,16 @@ if __name__ == "__main__":
         (np.array([2, 3, 4]), np.array([100, 1, -2])),
         (np.array([2, 3, 4]), np.array([1, 1, -200])),
     ]
+    dta2 = [
+        np.array([6, 5, 7]),
+        np.array([10, 1, -200]),
+        np.array([100, 1, -20]),
+        np.array([100, 100, -200]),
+        np.array([100, 1, -2]),
+        np.array([1, 1, -200]),
+    ]
     lab = [f"{i}" for i in range(6)]
     r = Ridge(dta, "gsz", ylabel="xlabel")
-    r2 = Ridge([np.array([1, 2, 3])], "b")
     r.main()
     f = r.figure
     l = r.lines
