@@ -101,7 +101,7 @@ class Ridge:
                 self.ax.set_yscale(self.pltype)
             self.ax.set_ylabel(self.ylabel)
             y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
-            ylim = self.ylim if self.ylim else [y_min, y_max]
+            ylim = self.ylim or [y_min, y_max]
             self.ax.set_ylim(ylim)
             # fig.text(0.01, 0.5, ylabel, ha='left', va='center', rotation='vertical')
 
