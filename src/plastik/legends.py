@@ -69,11 +69,10 @@ def topside_legends(
     }
     loc = _sides[side]
     anchor = _anchors[side]
-    if len(args) != 0:
-        if isinstance(args[0][0], str):
-            raise ValueError(
-                "The first args parameter must be a sequence of Artist, not str."
-            )
+    if len(args) != 0 and isinstance(args[0][0], str):
+        raise ValueError(
+            "The first args parameter must be a sequence of Artist, not str."
+        )
     if len(args) < 2:
         try:
             # If the labels are defined directly in the legend as a list, calling ax.legend()
