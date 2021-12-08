@@ -54,8 +54,10 @@ class Ridge:
     y_scale: float = attr.ib(converter=float, default=1.0)
     xlabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
     ylabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
+    xlim: list[float] = attr.Factory(list)
     ylim: list[float] = attr.Factory(list)
     pltype: str = attr.ib(converter=str, default="plot")
+    line_style: str = attr.ib(converter=str, default="-")
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
 
     def set_grid(self) -> None:
@@ -71,9 +73,9 @@ class Ridge:
             self.gs.update(hspace=0.0)
 
     def set_xaxs(self) -> None:
-        # if "xlim" in kwargs.keys():
-        #     x_min, x_max = kwargs["xlim"]
-        if len(self.data[0]) != 2:
+        if self.xlim:
+            x_min, x_max = self.xlim
+        elif len(self.data[0]) != 2:
             x_min, x_max = -0.5, len(self.data[0]) - 0.5
         elif "c" in self.options:
             x_min, x_max = self.__x_limit(False)
@@ -217,6 +219,18 @@ class Ridge:
         y_max = s_.max() if s_.max() > y_max else y_max
         return y_min, y_max, s, spines
 
+    def __draw_lines(self, s, col) -> None:
+        # Plot data
+        p_func = getattr(self.ax_objs[-1], self.pltype)
+        line_type = self.line_style + "o" if "d" in self.options else self.line_style
+        if len(s) == 2:
+            ell = p_func(s[0], s[1], line_type, color=col, markersize=1.5)[0]
+        else:
+            ell = p_func(s, line_type, color=col, markersize=1.5)[0]
+
+        # Append in line-list to create legend
+        self.__lines.append(ell)
+
     def data_loop(self) -> tuple[float, float]:
         # Loop through data
         self.__lines = []
@@ -224,23 +238,8 @@ class Ridge:
         y_max = -np.inf
         for i, s in enumerate(self.data):
             col = next(self.colors)
-            # lnst = next(ls)
             y_min, y_max, s, spines = self.__setup_axis(y_min, y_max, i, s)
-
-            # Plot data
-            p_func = getattr(self.ax_objs[-1], self.pltype)
-            line_type = "-o" if "d" in self.options else "-"
-            # line_type = kwargs["lt"] if "lt" in kwargs.keys() else line_type
-            # line_type = kwargs.pop("lt", line_type)
-            # clr = kwargs["color"] if "color" in kwargs.keys() else col
-            if len(s) == 2:
-                ell = p_func(s[0], s[1], line_type, color=col, markersize=1.5)[0]
-            else:
-                ell = p_func(s, line_type, color=col, markersize=1.5)[0]
-
-            # Append in line-list to create legend
-            self.__lines.append(ell)
-            # self.ax.add_line(ell)
+            self.__draw_lines(s, col)
             self.ax_objs[-1].patch.set_alpha(0)
             # Scale all subplots to the same x axis
             plt.xlim([self.xmin, self.xmax])
@@ -331,7 +330,7 @@ if __name__ == "__main__":
         np.array([1, 1, -200]),
     ]
     lab = [f"{i}" for i in range(6)]
-    r = Ridge(dta, "gsz", ylabel="xlabel")
+    r = Ridge(dta, "gsz", ylabel="xlabel", line_style="-..")
     r.main()
     f = r.figure
     l = r.lines

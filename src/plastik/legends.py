@@ -1,6 +1,6 @@
 """Manipulate the legend of a matplotlib figure."""
 
-from typing import Any, Optional
+from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
