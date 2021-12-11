@@ -1,12 +1,13 @@
 """Creates a ridge plot figure."""
 
 import itertools
-import attr
 from typing import Any, Optional, Union
 
+import attr
 import matplotlib.gridspec as grid_spec
 import matplotlib.pyplot as plt
 import numpy as np
+
 import plastik
 
 
@@ -39,6 +40,9 @@ class Ridge:
         List containing the upper and lower y-axis limit in all ridges.
     pltype: str
         plt class (loglog, plot, semilogx etc.) Defaults to plot.
+    kwargs: dict
+        Any keyword argument plt.plot accepts. (Need to be a dict, asterisk syntax not
+        supported.)
     """
 
     data: list[Any] = attr.ib()
@@ -57,7 +61,7 @@ class Ridge:
     xlim: list[float] = attr.Factory(list)
     ylim: list[float] = attr.Factory(list)
     pltype: str = attr.ib(converter=str, default="plot")
-    line_style: str = attr.ib(converter=str, default="-")
+    kwargs: dict[str, Any] = attr.Factory(dict)
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
 
     def set_grid(self) -> None:
@@ -77,12 +81,13 @@ class Ridge:
             x_min, x_max = self.xlim
         elif len(self.data[0]) != 2:
             x_min, x_max = -0.5, len(self.data[0]) - 0.5
+            x_min = 0.5 if self.pltype in ["loglog", "semilogx"] else x_min
         elif "c" in self.options:
             x_min, x_max = self.__x_limit(False)
         else:
             x_min, x_max = self.__x_limit()
-        self.xmin = x_min
-        self.xmax = x_max
+        self.__xmin = x_min
+        self.__xmax = x_max
 
     def set_ylabel(
         self, y_min: Optional[float] = None, y_max: Optional[float] = None
@@ -222,18 +227,17 @@ class Ridge:
     def __draw_lines(self, s, col) -> None:
         # Plot data
         p_func = getattr(self.ax_objs[-1], self.pltype)
-        line_type = self.line_style + "o" if "d" in self.options else self.line_style
         if len(s) == 2:
-            ell = p_func(s[0], s[1], line_type, color=col, markersize=1.5)[0]
+            ell = p_func(s[0], s[1], color=col, markersize=2.5, **self.kwargs)[0]
         else:
-            ell = p_func(s, line_type, color=col, markersize=1.5)[0]
+            ell = p_func(s, color=col, markersize=2.5, **self.kwargs)[0]
 
         # Append in line-list to create legend
         self.__lines.append(ell)
 
     def data_loop(self) -> tuple[float, float]:
         # Loop through data
-        self.__lines = []
+        self.__lines: list[plt.Line2D] = []
         y_min = np.inf
         y_max = -np.inf
         for i, s in enumerate(self.data):
@@ -242,7 +246,7 @@ class Ridge:
             self.__draw_lines(s, col)
             self.ax_objs[-1].patch.set_alpha(0)
             # Scale all subplots to the same x axis
-            plt.xlim([self.xmin, self.xmax])
+            plt.xlim([self.__xmin, self.__xmax])
             if self.ylim:
                 plt.ylim(self.ylim)
 
@@ -313,31 +317,30 @@ class Ridge:
 
 
 if __name__ == "__main__":
-    dta = [
-        (np.array([1, 2, 3]), np.array([6, 5, 7])),
-        (np.array([2, 3, 4]), np.array([10, 1, -200])),
-        (np.array([2, 3, 4]), np.array([100, 1, -20])),
-        (np.array([2, 3, 4]), np.array([100, 100, -200])),
-        (np.array([2, 3, 4]), np.array([100, 1, -2])),
-        (np.array([2, 3, 4]), np.array([1, 1, -200])),
-    ]
-    dta2 = [
-        np.array([6, 5, 7]),
-        np.array([10, 1, -200]),
-        np.array([100, 1, -20]),
-        np.array([100, 100, -200]),
-        np.array([100, 1, -2]),
-        np.array([1, 1, -200]),
-    ]
+    x = np.linspace(1e-1, 3e1, 1000) ** 2
+
+    def func(x, s):
+        return 10 / ((x - s) ** 2 + 1)
+
+    a1 = func(x, 3)
+    a2 = func(x, 1)
+    a3 = func(x, 0)
+    a4 = func(x, 100)
+    a5 = func(x, 300)
+    a6 = func(x, 500)
+    dt = [a1, a2, a3, a4, a5, a6]
+    dta = [(x, a) for a in dt]
     lab = [f"{i}" for i in range(6)]
-    r = Ridge(dta, "gsz", ylabel="xlabel", line_style="-..")
+    kws = {"ls": "-."}
+    r = Ridge(dt, "z", ylabel="xlabel", pltype="loglog", y_scale=0.5)
     r.main()
     f = r.figure
-    l = r.lines
-    a = r.top_axes
+    ell = r.lines
+    at = r.top_axes
+    ab = r.bottom_axes
     axs = r.all_axes
     # a.legend(l, lab)
-    plastik.topside_legends(a, l, lab, side="top")
-    # for ax in axs:
-    #     plastik.log_tick_format(ax, which="both")
+    plastik.topside_legends(ab, ell, lab, c_max=2, side="bottom left")
+    for ax in axs:
+        plastik.log_tick_format(ax, which="both")
     plt.show()
