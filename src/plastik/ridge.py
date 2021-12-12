@@ -105,6 +105,7 @@ class Ridge:
                 left=False,
                 right=False,
             )
+            plt.setp(self.ax.get_yticklabels(), alpha=0)
         else:
             self.ax.spines["top"].set_visible(False)
             self.ax.spines["bottom"].set_visible(False)
@@ -299,6 +300,10 @@ class Ridge:
     @property
     def bottom_axes(self) -> plt.Axes:
         return self.ax_objs[-1]
+
+    @property
+    def ylabel_axis(self) -> plt.Axes:
+        return self.ax
 
     @property
     def all_axes(self) -> list[plt.Axes]:
