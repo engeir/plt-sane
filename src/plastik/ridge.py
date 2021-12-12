@@ -110,11 +110,9 @@ class Ridge:
             self.ax.spines["bottom"].set_visible(False)
             self.ax.spines["left"].set_visible(False)
             self.ax.spines["right"].set_visible(False)
-            self.pltype = (
-                "log" if self.pltype in ["semilogy", "loglog"] else self.pltype
-            )
+            pltype = "log" if self.pltype in ["semilogy", "loglog"] else "linear"
             if self.pltype != "plot":
-                self.ax.set_yscale(self.pltype)
+                self.ax.set_yscale(pltype)
             self.ax.set_ylabel(self.ylabel)
             y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
             ylim = self.ylim or [y_min, y_max]
@@ -322,25 +320,19 @@ if __name__ == "__main__":
     def func(x, s):
         return 10 / ((x - s) ** 2 + 1)
 
-    a1 = func(x, 3)
-    a2 = func(x, 1)
-    a3 = func(x, 0)
-    a4 = func(x, 100)
-    a5 = func(x, 300)
-    a6 = func(x, 500)
-    dt = [a1, a2, a3, a4, a5, a6]
+    dt = [func(x, 3), func(x, 1), func(x, 0), func(x, 100), func(x, 300), func(x, 500)]
     dta = [(x, a) for a in dt]
     lab = [f"{i}" for i in range(6)]
     kws = {"ls": "-."}
-    r = Ridge(dt, "z", ylabel="xlabel", pltype="loglog", y_scale=0.5)
+    r = Ridge(dt, "z", ylabel="xlabel", pltype="semilogx", y_scale=0.5)
     r.main()
     f = r.figure
     ell = r.lines
     at = r.top_axes
     ab = r.bottom_axes
     axs = r.all_axes
-    # a.legend(l, lab)
+    at.legend(ell, lab)
     plastik.topside_legends(ab, ell, lab, c_max=2, side="bottom left")
     for ax in axs:
-        plastik.log_tick_format(ax, which="both")
+        plastik.log_tick_format(ax, which="x")
     plt.show()
