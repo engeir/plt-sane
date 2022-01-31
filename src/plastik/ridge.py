@@ -48,7 +48,7 @@ class Ridge:
     data: list[Any] = attr.ib()
 
     @data.validator
-    def _check_data_type(self, attribute, value):
+    def _check_data_type(self, _, value):
         if not isinstance(value[0], tuple) and not isinstance(value[0], np.ndarray):
             raise TypeError(
                 f"data must be a list of tuples or numpy arrays, not list of {type(self.data[0])}."
