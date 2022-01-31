@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plastik"
-version = "0.2.0"
+version = "0.2.1"
 description = "plastic surgery for plt"
 authors = ["engeir <eirroleng@gmail.com>"]
 
