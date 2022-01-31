@@ -219,8 +219,8 @@ class Ridge:
         else:
             spines = ["top", "bottom"]
         s_ = s if isinstance(s, np.ndarray) else s[1]
-        y_min = s_.min() if s_.min() < y_min else y_min
-        y_max = s_.max() if s_.max() > y_max else y_max
+        y_min = min(s_.min(), y_min)
+        y_max = max(s_.max(), y_max)
         return y_min, y_max, s, spines
 
     def __draw_lines(self, s, col) -> None:
