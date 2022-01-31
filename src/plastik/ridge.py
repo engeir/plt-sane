@@ -1,7 +1,7 @@
 """Creates a ridge plot figure."""
 
 import itertools
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attr
 import matplotlib.gridspec as grid_spec
@@ -40,7 +40,7 @@ class Ridge:
         List containing the upper and lower y-axis limit in all ridges.
     pltype: str
         plt class (loglog, plot, semilogx etc.) Defaults to plot.
-    kwargs: dict
+    kwargs: Dict
         Any keyword argument plt.plot accepts. (Need to be a dict, asterisk syntax not
         supported.)
     """
@@ -61,7 +61,7 @@ class Ridge:
     xlim: List[float] = attr.Factory(list)
     ylim: List[float] = attr.Factory(list)
     pltype: str = attr.ib(converter=str, default="plot")
-    kwargs: dict[str, Any] = attr.Factory(dict)
+    kwargs: Dict[str, Any] = attr.Factory(dict)
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
 
     def set_grid(self) -> None:
