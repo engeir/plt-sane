@@ -38,7 +38,7 @@ def topside_legends(
 
     Other Parameters
     ----------------
-    args: list
+    args: List
         Parameters given to ax.legend(), i.e. handles and labels. This is useful if you
         have many axes objects with one or more lines on them, but you want all lines in
         one legend at a given axes object.

@@ -1,7 +1,7 @@
 """Creates a ridge plot figure."""
 
 import itertools
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import attr
 import matplotlib.gridspec as grid_spec
@@ -17,7 +17,7 @@ class Ridge:
 
     Parameters
     ----------
-    data: list
+    data: List
         A list of n 2-tuples with (x, y)-pairs; list of n np.ndarrays: (y)
     options: str
         String with characters that set different options. This include 'b' (blank), 'c'
@@ -36,7 +36,7 @@ class Ridge:
         x-label placed at the bottom.
     ylabel: str
         y-label for all y-axis.
-    ylim: list
+    ylim: List
         List containing the upper and lower y-axis limit in all ridges.
     pltype: str
         plt class (loglog, plot, semilogx etc.) Defaults to plot.
@@ -45,7 +45,7 @@ class Ridge:
         supported.)
     """
 
-    data: list[Any] = attr.ib()
+    data: List[Any] = attr.ib()
 
     @data.validator
     def _check_data_type(self, _, value):
@@ -58,8 +58,8 @@ class Ridge:
     y_scale: float = attr.ib(converter=float, default=1.0)
     xlabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
     ylabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
-    xlim: list[float] = attr.Factory(list)
-    ylim: list[float] = attr.Factory(list)
+    xlim: List[float] = attr.Factory(list)
+    ylim: List[float] = attr.Factory(list)
     pltype: str = attr.ib(converter=str, default="plot")
     kwargs: dict[str, Any] = attr.Factory(dict)
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
@@ -70,7 +70,7 @@ class Ridge:
         self.__fig = plt.figure(figsize=fsize)
         # Set line type of horizontal grid lines
         self.gls = itertools.cycle(["-", "--"])
-        self.ax_objs: list[plt.Axes] = []
+        self.ax_objs: List[plt.Axes] = []
         if "z" in self.options:
             self.gs.update(hspace=-0.5)
         else:
@@ -207,9 +207,9 @@ class Ridge:
         y_min: float,
         y_max: float,
         i: int,
-        s: Union[tuple[np.ndarray, np.ndarray], np.ndarray],
-    ) -> tuple[
-        float, float, Union[tuple[np.ndarray, np.ndarray], np.ndarray], list[str]
+        s: Union[Tuple[np.ndarray, np.ndarray], np.ndarray],
+    ) -> Tuple[
+        float, float, Union[Tuple[np.ndarray, np.ndarray], np.ndarray], List[str]
     ]:
         self.ax_objs.append(self.__fig.add_subplot(self.gs[i : i + 1, 0:]))
         if i == 0:
@@ -234,9 +234,9 @@ class Ridge:
         # Append in line-list to create legend
         self.__lines.append(ell)
 
-    def data_loop(self) -> tuple[float, float]:
+    def data_loop(self) -> Tuple[float, float]:
         # Loop through data
-        self.__lines: list[plt.Line2D] = []
+        self.__lines: List[plt.Line2D] = []
         y_min = np.inf
         y_max = -np.inf
         for i, s in enumerate(self.data):
@@ -257,9 +257,9 @@ class Ridge:
                 self.__resolve_options(i, spines, col)
         return y_min, y_max
 
-    def __x_limit(self, maxx=True) -> tuple[float, float]:
+    def __x_limit(self, maxx=True) -> Tuple[float, float]:
         if isinstance(self.data[0], tuple):
-            data: list[np.ndarray] = [d[0] for d in self.data]
+            data: List[np.ndarray] = [d[0] for d in self.data]
         else:
             raise ValueError("'data' must have x-values.")
         t_min = data[0]
@@ -286,7 +286,7 @@ class Ridge:
         return x_min, x_max
 
     @property
-    def lines(self) -> list:
+    def lines(self) -> List:
         return self.__lines
 
     @property
@@ -306,7 +306,7 @@ class Ridge:
         return self.ax
 
     @property
-    def all_axes(self) -> list[plt.Axes]:
+    def all_axes(self) -> List[plt.Axes]:
         return self.ax_objs
 
     def main(self) -> None:
