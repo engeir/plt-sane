@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plastik"
-version = "0.2.0"
+version = "0.2.1"
 description = "plastic surgery for plt"
 authors = ["engeir <eirroleng@gmail.com>"]
 
@@ -8,6 +8,7 @@ authors = ["engeir <eirroleng@gmail.com>"]
 python = ">=3.7,<3.11"
 numpy = "^1.21.4"
 matplotlib = "^3.5.0"
+attrs = "^21.4.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
@@ -20,6 +21,7 @@ pyupgrade = "^2.29.1"
 darglint = "^1.8.1"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
+ipykernel = "^6.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

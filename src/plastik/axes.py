@@ -1,11 +1,15 @@
 """Manipulate the axis of matplotlib figures."""
 
+from typing import Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import ticker
 
 
-def dark_theme(*ax: plt.Axes, keep_yaxis: bool = False):
+def dark_theme(
+    *ax: plt.Axes, fig: Optional[plt.Figure] = None, keep_yaxis: bool = False
+):
     """Change plot style to fit a dark background.
 
     This is better in e.g. beamers with dark theme.
@@ -20,11 +24,15 @@ def dark_theme(*ax: plt.Axes, keep_yaxis: bool = False):
         lines. Defaults to False.
     """
     for a in ax:
-        a.tick_params(axis="both", colors="w")
         if not keep_yaxis:
+            a.tick_params(axis="both", colors="w")
             a.yaxis.label.set_color("w")
+        else:
+            a.tick_params(axis="x", colors="w")
         a.xaxis.label.set_color("w")
         plt.setp(a.spines.values(), color="gray")
+    if fig is not None:
+        fig.patch.set_alpha(0)
 
 
 def log_tick_format(axes: plt.Axes, which: str, base: float = 10) -> plt.Axes:
