@@ -8,15 +8,21 @@
 ## TODO
 
 * Add and set up tests in pre-commit
-* Set up actions
 
 ## Install
 
+This module is available through [PyPI]:
+
 ```sh
-# Into poetry project
-poetry add git+https://github.com/engeir/plastik.git@main
-# With pip
-pip install git+https://github.com/engeir/plastik.git
+pip install plastik
+```
+
+Installing the development version is done using [poetry]:
+
+```sh
+git clone https://github.com/engeir/plastik.git
+cd plastik
+poetry install
 ```
 
 ## Usage
@@ -34,3 +40,6 @@ pip install git+https://github.com/engeir/plastik.git
 ### Example use
 
 See [examples](examples/example.ipynb).
+
+[PyPI]: https://pypi.org/
+[poetry]: https://python-poetry.org
