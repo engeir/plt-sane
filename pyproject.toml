@@ -2,7 +2,18 @@
 name = "plastik"
 version = "0.2.2"
 description = "plastic surgery for plt"
-authors = ["engeir <eirroleng@gmail.com>"]
+authors = ["Eirik Rolland Enger <eirroleng@gmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+homepage = "https://github.com/engeir/plastik"
+repository = "https://github.com/engeir/plastik"
+documentation = "https://plastik.readthedocs.io/en/latest/"
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
