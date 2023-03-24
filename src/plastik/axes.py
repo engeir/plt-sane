@@ -9,7 +9,7 @@ from matplotlib import ticker
 
 def dark_theme(
     *ax: plt.Axes, fig: Optional[plt.Figure] = None, keep_yaxis: bool = False
-):
+) -> None:
     """Change plot style to fit a dark background.
 
     This is better in e.g. beamers with dark theme.
@@ -40,8 +40,8 @@ def log_tick_format(axes: plt.Axes, which: str, base: float = 10) -> plt.Axes:
 
     Change the logarithmic axes to use '1' and '10' (or the given base), i.e. without
     power, otherwise use the base to some power. For more robust and less error prone
-    results, the plotting type is also re-set with the same base ('loglog', 'semilogx' and
-    'semilogy').
+    results, the plotting type is also re-set with the same base ('loglog', 'semilogx'
+    and 'semilogy').
 
     Modified from:
     https://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting/33213196

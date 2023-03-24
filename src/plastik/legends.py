@@ -22,8 +22,8 @@ def topside_legends(
     ax: plt.Axes
         The axes object of the figure
     c_max: int
-        Total number of columns allowed. If less than `c_max` labels are used, `c_max` is
-        set to the number of labels. Defaults to 4.
+        Total number of columns allowed. If less than `c_max` labels are used, `c_max`
+        is set to the number of labels. Defaults to 4.
     alpha: float
         Alpha value for the background of the legend. Defaults to 0.8.
     side: str
@@ -69,23 +69,24 @@ def topside_legends(
     }
     loc = _sides[side]
     anchor = _anchors[side]
-    if len(args) != 0 and isinstance(args[0][0], str):
+    if args and isinstance(args[0][0], str):
         raise ValueError(
             "The first args parameter must be a sequence of Artist, not str."
         )
     if len(args) < 2:
         try:
-            # If the labels are defined directly in the legend as a list, calling ax.legend()
-            # will re-set it to an empty legend. Therefore, we grab the list and re-set it
-            # when we update the legend object.
+            # If the labels are defined directly in the legend as a list, calling
+            # ax.legend() will re-set it to an empty legend. Therefore, we grab the list
+            # and re-set it when we update the legend object.
             legend1: matplotlib.legend.Legend = ax.get_legend()
             lst = [l_.get_text() for l_ in legend1.get_texts()]
             l_d = len(legend1.get_texts())
         except AttributeError:
-            # If, however, the labels are set when creating the lines objects (e.g. ax.plot(x,
-            # y, label="Label for (x, y) data")), we first make sure the legend object is
-            # created by calling ax.legend(), then we check how many labels exist in it.
-            # Calling ax.legend() will in this case preserve all labels.
+            # If, however, the labels are set when creating the lines objects (e.g.
+            # ax.plot(x, y, label="Label for (x, y) data")), we first make sure the
+            # legend object is created by calling ax.legend(), then we check how many
+            # labels exist in it. Calling ax.legend() will in this case preserve all
+            # labels.
             ax.legend()
             legend2: matplotlib.legend.Legend = ax.get_legend()
             lst = []  # The empty list returns False.
@@ -97,7 +98,7 @@ def topside_legends(
     n_col = 1
     while l_d > n_col * n_row:
         n_col += 1
-    if len(args) != 0:
+    if args:
         leg = ax.legend(
             args[0],
             lst,
