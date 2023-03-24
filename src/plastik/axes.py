@@ -18,6 +18,8 @@ def dark_theme(
     ----------
     ax: plt.Axes
         Send in any number of matplotlib axes and the changes will be applied to all
+    fig: plt.Figure, optional
+        The figure object that should be altered
     keep_yaxis: bool
         Keep the colour of the label along the vertical axis as is.
         Useful if a plot has y-labels that are coloured to match the plotted
