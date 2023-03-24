@@ -30,29 +30,36 @@ repos:
     entry: poetry run black src
     types: [python]
 
-  - id: flake8
-    name: flake8
+  - id: ruff
+    name: ruff
     stages: [commit]
     language: system
-    entry: poetry run flake8 src
+    entry: poetry run ruff src
     types: [python]
-    exclude: setup.py
 
-  - id: mypy
-    name: mypy
-    stages: [commit]
-    language: system
-    entry: poetry run mypy
-    types: [python]
-    require_serial: true
-
-  # - id: darglint
-  #   name: darglint
+  # - id: flake8
+  #   name: flake8
   #   stages: [commit]
   #   language: system
-  #   entry: poetry run darglint src
+  #   entry: poetry run flake8 src
+  #   types: [python]
+  #   exclude: setup.py
+
+  # - id: mypy
+  #   name: mypy
+  #   stages: [commit]
+  #   language: system
+  #   entry: poetry run mypy
   #   types: [python]
   #   require_serial: true
+
+  - id: darglint
+    name: darglint
+    stages: [commit]
+    language: system
+    entry: poetry run darglint src
+    types: [python]
+    require_serial: true
 
   - id: pyupgrade
     name: pyupgrade

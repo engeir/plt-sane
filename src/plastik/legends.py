@@ -36,6 +36,11 @@ def topside_legends(
     plt.Axes
         Axes object with updated (topside) legend.
 
+    Raises
+    ------
+    ValueError
+        If the first parameter is a string type (should be an axis Artist).
+
     Other Parameters
     ----------------
     args: List

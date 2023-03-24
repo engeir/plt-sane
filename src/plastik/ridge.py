@@ -21,14 +21,14 @@ class Ridge:
         A list of n 2-tuples with (x, y)-pairs; list of n np.ndarrays: (y)
     options: str
         String with characters that set different options. This include 'b' (blank), 'c'
-        (crop x-axis), 'g' (grid), 's' (slalom axis) and 'z' (squeeze). Blank removes all
-        axis lines and turns the grid off. Crop sets the x-axis to the smallest common
-        x-limit in all data tuples. Grid turns on the grid. Slalom axis make the y-axis
-        ticks alternate between the left and right side. Squeeze makes each axis plot
-        overlap by 50% (this turns slalom axis on, and makes two RHS ticks contiguous).
-        The options are combined in a single string in arbitrary order. Any other
-        characters than 'bcgsz' can be included without having any effect, the class with
-        just look for existence of any of 'bcgsz'.
+        (crop x-axis), 'g' (grid), 's' (slalom axis) and 'z' (squeeze). Blank removes
+        all axis lines and turns the grid off. Crop sets the x-axis to the smallest
+        common x-limit in all data tuples. Grid turns on the grid. Slalom axis make the
+        y-axis ticks alternate between the left and right side. Squeeze makes each axis
+        plot overlap by 50% (this turns slalom axis on, and makes two RHS ticks
+        contiguous). The options are combined in a single string in arbitrary order. Any
+        other characters than 'bcgsz' can be included without having any effect, the
+        class with just look for existence of any of 'bcgsz'.
     y_scale: float
         Scale of y-axis relative to the default which decides the total height of the
         figure. Defaults to 1.
@@ -51,7 +51,8 @@ class Ridge:
     def _check_data_type(self, _, value):
         if not isinstance(value[0], tuple) and not isinstance(value[0], np.ndarray):
             raise TypeError(
-                f"data must be a list of tuples or numpy arrays, not list of {type(self.data[0])}."
+                "data must be a list of tuples or numpy arrays, not list of"
+                f" {type(self.data[0])}."
             )
 
     options: str = attr.ib(converter=str)
@@ -107,17 +108,20 @@ class Ridge:
             )
             plt.setp(self.ax.get_yticklabels(), alpha=0)
         else:
-            self.ax.spines["top"].set_visible(False)
-            self.ax.spines["bottom"].set_visible(False)
-            self.ax.spines["left"].set_visible(False)
-            self.ax.spines["right"].set_visible(False)
+            self._set_ymin_ymax(y_min, y_max)
+
+    def _set_ymin_ymax(self, y_min, y_max):
+        self.ax.spines["top"].set_visible(False)
+        self.ax.spines["bottom"].set_visible(False)
+        self.ax.spines["left"].set_visible(False)
+        self.ax.spines["right"].set_visible(False)
+        if self.pltype != "plot":
             pltype = "log" if self.pltype in ["semilogy", "loglog"] else "linear"
-            if self.pltype != "plot":
-                self.ax.set_yscale(pltype)
-            self.ax.set_ylabel(self.ylabel)
-            y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
-            ylim = self.ylim or [y_min, y_max]
-            self.ax.set_ylim(ylim)
+            self.ax.set_yscale(pltype)
+        self.ax.set_ylabel(self.ylabel)
+        y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
+        ylim = self.ylim or [y_min, y_max]
+        self.ax.set_ylim(ylim)
 
     def __blank(self) -> None:
         spine = ["top", "bottom", "left", "right"]
@@ -249,8 +253,8 @@ class Ridge:
             if self.ylim:
                 plt.ylim(self.ylim)
 
-            # The length of data is greater than one, fix the plot according to the input
-            # args and kwargs.
+            # The length of data is greater than one, fix the plot according to the
+            # input args and kwargs.
             if "b" in self.options:
                 self.__blank()
             else:
@@ -269,11 +273,11 @@ class Ridge:
             if maxx:
                 t_min = t if t_0 < t_min[0] else t_min
                 # t_max = t if t_1 > t_max[-1] else t_max
-                x_max = t_max if t_max > x_max else x_max
+                x_max = max(t_max, x_max)
             else:
                 t_min = t if t[0] > t_min[0] else t_min
                 # t_max = t if t[-1] < t_max[-1] else t_max
-                x_max = t_max if t_max < x_max else x_max
+                x_max = min(t_max, x_max)
         diff = 0.05 * (x_max - t_min[0])
         # x_max = t_max[-1] + diff
         x_max += diff
