@@ -1,6 +1,6 @@
 """Manipulate the legend of a matplotlib figure."""
 
-from typing import Any
+from typing import Any, Literal, Optional
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -12,7 +12,19 @@ def topside_legends(
     *args,
     c_max: int = 4,
     alpha: float = 0.8,
-    side: str = "top",
+    side: Literal[
+        "top",
+        "bottom",
+        "right",
+        "left",
+        "top right",
+        "top left",
+        "bottom right",
+        "bottom left",
+    ] = "top",
+    edgecolor: str | tuple[float, float, float] = "",
+    facecolor: str | tuple[float, float, float] = "",
+    anchor_: Optional[tuple[float, float]] = None,
     **kwargs: Any,
 ) -> plt.Axes:
     """Move the legend to the top of the plot.
@@ -30,6 +42,26 @@ def topside_legends(
         Places the legend at the given side. Valid sides are 'top', 'bottom', 'right',
         'left', 'top right', 'top left', 'bottom right' and 'bottom left'. Defaults to
         'top'.
+    edgecolor: str | tuple
+        Set the colour of the legend edge. Can also be set with the alias 'ec'. Values
+        can be either a string colour or a RGB tuple.
+    facecolor: str | tuple
+        Set the colour of the legend face/background. Can also be set with the alias
+        'fc'. Values can be either a string colour or a RGB tuple.
+    anchor_: tuple[float, float], optional
+        If you want to place the legend at a custom location, you can set the 'anchor'
+        keyword parameter to a tuple. (0, 0) is the bottom left of the plot, (1, 1) is
+        the top right. The anchor location defines where the 'side' parameter goes, so
+        with 'anchor=(0.5, 0.5)' and 'side="top left"', top top left corner of the
+        legend will be at the centre of the plot.
+    *args: List
+        Parameters given to ax.legend(), i.e. handles and labels. This is useful if you
+        have many axes objects with one or more lines on them, but you want all lines in
+        one legend at a given axes object.
+    **kwargs: Any
+        All keyword arguments are sent to ax.legend().
+        See https://matplotlib.org/stable/api/legend_api.html#matplotlib.legend.Legend
+        for details.
 
     Returns
     -------
@@ -40,17 +72,6 @@ def topside_legends(
     ------
     ValueError
         If the first parameter is a string type (should be an axis Artist).
-
-    Other Parameters
-    ----------------
-    args: List
-        Parameters given to ax.legend(), i.e. handles and labels. This is useful if you
-        have many axes objects with one or more lines on them, but you want all lines in
-        one legend at a given axes object.
-    kwargs: Any
-        All keyword arguments are sent to ax.legend().
-        See https://matplotlib.org/stable/api/legend_api.html#matplotlib.legend.Legend
-        for details.
     """
     _sides = {
         "top": "upper center",
@@ -73,7 +94,9 @@ def topside_legends(
         "bottom left": (-0.04, -0.05),
     }
     loc = _sides[side]
-    anchor = _anchors[side]
+    edgecolor = kwargs.pop("ec", edgecolor)
+    facecolor = kwargs.pop("fc", facecolor)
+    anchor = anchor_ or _anchors[side]
     if args and isinstance(args[0][0], str):
         raise ValueError(
             "The first args parameter must be a sequence of Artist, not str."
@@ -94,7 +117,7 @@ def topside_legends(
             # labels.
             ax.legend()
             legend2: matplotlib.legend.Legend = ax.get_legend()
-            lst = []  # The empty list returns False.
+            lst = []  # The empty list is falsy.
             l_d = len(legend2.get_texts())
     else:
         lst = args[1]
@@ -130,7 +153,9 @@ def topside_legends(
             ncol=n_col,
             **kwargs,
         )
-    leg.get_frame().set_alpha(None)
-    leg.get_frame().set_facecolor((1, 1, 1, alpha))
-    leg.get_frame().set_edgecolor((0.5, 0.5, 0.5))
+    if facecolor:
+        leg.get_frame().set_facecolor(facecolor)
+    if edgecolor:
+        leg.get_frame().set_edgecolor(edgecolor)
+    leg.get_frame().set_alpha(alpha)
     return ax
