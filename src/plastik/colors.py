@@ -1,6 +1,7 @@
 import sys
 from typing import Literal, Sequence, overload
 
+import cmcrameri  # noqa
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -115,7 +116,11 @@ def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[st
             s1, s2 = str(e).split(" supported values are ")
             print("Supported colour names are:")
             for word in s2.split(", "):
-                print("\t", word[1:-1])
+                word = word[1:-1]
+                if word.startswith("cmc"):
+                    print("\t", word, "\t(from cmcrameri)")
+                else:
+                    print("\t", word)
         sys.exit()
     if map:
         return plt.get_cmap(cmap_name, n)

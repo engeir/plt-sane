@@ -240,7 +240,7 @@ def color_map():
 
     # And as our final trick, let us use a pre-defined colour palette for a section of
     # the colour map, in addition to adding in some of our own.
-    viridis = plastik.colors.create_colorlist("viridis", 14)
+    viridis = plastik.colors.create_colorlist("cmc.batlow", 14)
     v_check = plastik.colors.create_colorlist(viridis, 14)
     v_check2 = plastik.colors.create_colorlist([viridis[0], viridis[-1]], 14)
     print(viridis)  # True viridis (by definition)
