@@ -21,6 +21,7 @@ numpy = "^1.21.4"
 matplotlib = "^3.5.0"
 attrs = "^21.4.0"
 importlib-metadata = "^6.1.0"
+pywaffle = "^1.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
