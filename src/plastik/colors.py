@@ -1,3 +1,4 @@
+import sys
 from typing import Literal, Sequence, overload
 
 import matplotlib as mpl
@@ -25,21 +26,23 @@ def create_colorlist(
 ) -> list[str] | mpl.colors.Colormap:
     """Create `n` colors from a color map.
 
-    The `n` colors are drawn from one of the matplotlib color maps, or a new color map
-    is created using the input colors.
+    The `n` colours are drawn from one of the matplotlib colour maps, or a new colour
+    map is created using the input colours. Specifying 'help' as the ``color_specifier``
+    will print the list of available colour names in a nicer format.
 
     Parameters
     ----------
     color_specifier : Sequence | str
-        The name of a matplotlib color map or a list of two colors. To get the full list
-        of available color maps, try with a nonsense color map, or see
+        The name of a matplotlib colour map or a list of two colors. To get the full
+        list of available color maps, try with a nonsense color map, or see
         https://matplotlib.org/stable/tutorials/colors/colormaps.html#classes-of-colormaps.
         If two colors in a list is provided, any color that
-        ``matplotlib.colors.LinearSegmentedColormap.from_list`` accepts is valid.
+        ``matplotlib.colors.LinearSegmentedColormap.from_list`` accepts is valid. You
+        may also use the special name 'help' to get a list of available colour names.
     n : int
         The number of colors to be created.
     map : bool
-        If True, return the color map itself instead of the list. To draw colors from
+        If True, return the colour map itself instead of the list. To draw colours from
         it, use ``color_map(range(n))``, or to place HEX values in a list::
 
             import matplotlib.colors as mpl.colors
@@ -105,6 +108,15 @@ def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[st
     list[str]
         A list of `n` colors in HEX format.
     """
+    if cmap_name == "help":
+        try:
+            plt.get_cmap(cmap_name, 1)
+        except Exception as e:
+            s1, s2 = str(e).split(" supported values are ")
+            print("Supported colour names are:")
+            for word in s2.split(", "):
+                print("\t", word[1:-1])
+        sys.exit()
     if map:
         return plt.get_cmap(cmap_name, n)
     return [mpl.colors.to_hex(c) for c in plt.get_cmap(cmap_name, n)(range(n))]
