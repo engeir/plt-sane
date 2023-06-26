@@ -241,7 +241,11 @@ def color_map():
         c=custom_colors_map(range(20)),
     )
     ax2 = ax.inset_axes([x0, y0, width, height])
-    plastik.colors.make_color_swatch(ax2, custom_colors_map, no_border=True, ratio=5)
+    ax2 = plastik.colors.make_color_swatch(
+        ax2, custom_colors_map, no_ticks=False, ratio=5
+    )
+    ax2.set_xticks([0, 30, 60, 90], [0, "hey", True, 2], size=6)
+    ax2.set_yticks([])
     plt.show()
 
     # And as our final trick, let us use a pre-defined colour palette for a section of
@@ -264,14 +268,15 @@ def color_map():
     # As an inset with other data
     plt.figure()
     ax = plt.gca()
-    x0, y0, width, height = 0.52, 0.8, 0.40, 0.15
+    x0, y0, width, height = 0.57, 0.87, 0.40, 0.1
     ax.scatter(
         np.arange(len(custom)),
         np.ones(len(custom)),
         c=custom,
     )
     ax2 = ax.inset_axes([x0, y0, width, height])
-    plastik.colors.make_color_swatch(ax2, custom, ratio=2 * len(custom), no_border=True)
+    plastik.colors.make_color_swatch(ax2, custom, ratio=2 * len(custom))
+    ax2.set_xticks([0, 3, 6, 17, 20], [0, "Zzz", "See", "Stop", 2], rotation=20, size=6)
     plt.show()
 
 

@@ -53,13 +53,13 @@ repos:
   #   types: [python]
   #   require_serial: true
 
-  - id: darglint
-    name: darglint
-    stages: [commit]
-    language: system
-    entry: poetry run darglint src
-    types: [python]
-    require_serial: true
+  # - id: darglint
+  #   name: darglint
+  #   stages: [commit]
+  #   language: system
+  #   entry: poetry run darglint src
+  #   types: [python]
+  #   require_serial: true
 
   - id: pyupgrade
     name: pyupgrade

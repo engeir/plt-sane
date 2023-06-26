@@ -256,8 +256,8 @@ def make_color_swatch(
     >>> for _ in range(3):
     ...     custom.insert(0, "#2eff2e")
 
-    Plot the color_map alone. The ``figsize`` parameter exactly defines the shape of the
-    colour swatch.
+    Plot the ``color_map`` alone. The ``figsize`` parameter exactly defines the shape of
+    the colour swatch.
 
     >>> plt.figure(figsize=(10, 1), layout="constrained")
     >>> plastik.colors.make_color_swatch(plt.gca(), custom, no_ticks=False)
@@ -273,9 +273,16 @@ def make_color_swatch(
     ...     c=custom,
     ... )
     >>> ax2 = ax.inset_axes([x0, y0, width, height])
-    >>> plastik.colors.make_color_swatch(
+    >>> ax2 = plastik.colors.make_color_swatch(
     ...     ax2, custom, ratio=2 * len(custom), no_border=True
     ... )
+
+    You can make a custom label with the returned axis element's ``set_xticks`` (or
+    ``set_yticks``), where ``length`` is the length of the given ``c_bar`` list or equal
+    to the resolution.
+
+    >>> length = len(custom)
+    >>> ax2.set_xticks(list(range(length)), [f"No: {i}" for i in range(length)])
     >>> plt.show()
     """
     if isinstance(c_bar, list):
