@@ -5,21 +5,17 @@
 
 > plt assist, plastic surgery for plt
 
-## TODO
-
-* Add and set up tests in pre-commit
-
 ## Install
 
-This module is available through [PyPI]:
+`plastik` is available through [PyPI]:
 
-```sh
+```bash
 pip install plastik
 ```
 
 Installing the development version is done using [poetry]:
 
-```sh
+```bash
 git clone https://github.com/engeir/plastik.git
 cd plastik
 poetry install
@@ -29,17 +25,21 @@ poetry install
 
 ### Functions
 
-* `dark_theme`
-* `log_tick_format`
-* `topside_legends`
+- `dark_theme`
+- `log_tick_format`
+- `topside_legends`
 
 ### Classes
 
-* `Ridge`
+- `Ridge`
 
 ### Example use
 
-See [examples](examples/example.ipynb).
+See [examples](./examples/example.py).
+
+## To do
+
+- Add and set up tests in pre-commit
 
 [PyPI]: https://pypi.org/
 [poetry]: https://python-poetry.org

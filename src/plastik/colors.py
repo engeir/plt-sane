@@ -1,3 +1,4 @@
+import inspect
 import sys
 from typing import Literal, Sequence, overload
 
@@ -5,6 +6,7 @@ import cmcrameri  # noqa
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import palettable  # noqa
 import pywaffle
 
 
@@ -62,7 +64,20 @@ def create_colorlist(
 
     See also
     --------
-    cosmoplots.generate_hex_colors : Color generator based on standard color maps.
+    `Palettable<https://jiffyclub.github.io/palettable/#documentation>`_ is a collection
+    of predefined colour maps that include the matplotlib colours, cmcrameri colours and
+    many more (colour maps from the Wes Anderson movies being one of them!). Let us look
+    at an example::
+
+        import matplotlib.pyplot as plt
+        from palettable.wesanderson import Moonrise1_5 as wes_clr
+        import plastik
+        plastik.colors.make_color_swatch(
+            plt.figure(figsize=(12, 3)).gca(),
+            wes_clr.hex_colors,
+        )
+
+    cosmoplots.generate_hex_colors : Color generator based on standard colour maps.
 
     Note
     ----
@@ -160,6 +175,28 @@ def _create_colorlist_between(colors: Sequence, n: int, map: bool = False) -> li
             range(n)
         )
     ]
+
+
+def palettable_help() -> None:
+    print(
+        "This package includes `palettable` as a dependency, but do not implement any"
+        " of its colour maps. Rather, have a look at their documentation at"
+        " https://jiffyclub.github.io/palettable/#documentation and use it as its own"
+        " package. "
+    )
+    print(
+        "Integrating it with `plastik` is simple, just load any palette, and for"
+        " example call the `hex_colors` attribute they all have (again, see the"
+        " `palettable` documentation). This is a list of HEX colours that can then be"
+        " given to `make_color_swatch`."
+    )
+    print(
+        "And just to tease you a bit more, here is a list of the available colour"
+        " palette modules:"
+    )
+    for i in inspect.getmembers(palettable, inspect.ismodule):
+        if i[0] not in ["utils", "palette"]:
+            print("\t", i[0])
 
 
 def make_color_swatch(

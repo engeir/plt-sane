@@ -4,6 +4,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from palettable.wesanderson import FantasticFox2_5
 
 import plastik
 
@@ -195,6 +196,11 @@ def dark_theme():
 
 # Color map -------------------------------------------------------------------------- #
 def color_map():
+    plastik.colors.palettable_help()
+    plastik.colors.make_color_swatch(
+        plt.figure(figsize=(12, 3)).gca(),
+        FantasticFox2_5.hex_colors,
+    )
     prints = plastik.colors.create_colorlist("gist_rainbow", 20)
     print(prints)
     color_map = plastik.colors.create_colorlist("gist_rainbow", 20, map=True)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plastik"
-version = "0.4.2"
+version = "0.4.3"
 description = "plastic surgery for plt"
 authors = ["Eirik Rolland Enger <eirroleng@gmail.com>"]
 license = "GPLv3"
@@ -23,6 +23,7 @@ attrs = "^21.4.0"
 importlib-metadata = "^6.1.0"
 pywaffle = "^1.1.0"
 cmcrameri = "^1.5"
+palettable = "^3.3.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
