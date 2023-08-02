@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plastik"
-version = "0.4.3"
+version = "0.5.0"
 description = "plastic surgery for plt"
 authors = ["Eirik Rolland Enger <eirroleng@gmail.com>"]
 license = "GPLv3"
