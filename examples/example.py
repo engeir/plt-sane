@@ -10,6 +10,8 @@ import plastik
 
 SAVEDIR = "examples/figures"
 
+# Set the plotting style using the `default.mplstyle` file.
+mpl.style.use("plastik.default")
 # Log tick format -------------------------------------------------------------------- #
 
 
@@ -18,7 +20,7 @@ def log_tick_format():
     y = np.exp(np.linspace(-3, 5, 100))
     base = 2  # Default is 10, but 2 works equally well
     plt.figure()
-    plastik.log_tick_format(plt.gca(), "x", base=base)
+    plt.semilogx(base=base)
     plt.plot(y)
     plt.savefig(f"{SAVEDIR}/log_tick_format1.png")
     plastik.dark_theme(plt.gca(), fig=plt.gcf())
@@ -31,8 +33,7 @@ def log_tick_format():
     base = 2  # Default is 10, but 2 works equally well
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.loglog()
-    plastik.log_tick_format(ax, "both", base=base)
+    ax.loglog(base=base)
     ax.plot(y)
     plt.savefig(f"{SAVEDIR}/log_tick_format2.png")
     plastik.dark_theme(ax, fig=fig)
@@ -44,12 +45,7 @@ def log_tick_format():
     y = np.exp(np.linspace(-3, 5, 100))
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax = plastik.log_tick_format(ax, "y")
-    # If you do:
     ax.semilogy(y)
-    # the axis will be re-set, in which case you will have to run
-    plastik.log_tick_format(ax, "y")
-    # again. (But just use plt.plot(), so much easier.)
     plt.savefig(f"{SAVEDIR}/log_tick_format3.png")
     plastik.dark_theme(ax, fig=fig)
     plt.savefig(f"{SAVEDIR}/log_tick_format3_dark.png")
@@ -132,7 +128,7 @@ def ridge():
     a.legend(ell, lab)
     plastik.topside_legends(a, ell, c_max=6, side="right")
     for ax in axs:
-        plastik.log_tick_format(ax, which="y")
+        ax.semilogy()
     plt.savefig(f"{SAVEDIR}/ridge2.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
@@ -152,7 +148,7 @@ def ridge():
     a.legend(ell, lab)
     plastik.topside_legends(a, ell, c_max=5, side="right")
     for ax in axs:
-        plastik.log_tick_format(ax, which="x")
+        ax.semilogx()
     plt.savefig(f"{SAVEDIR}/ridge3.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
@@ -167,7 +163,7 @@ def ridge():
     a = r.bottom_axes
     axs = r.all_axes
     for ax in axs:
-        plastik.log_tick_format(ax, which="both")
+        ax.loglog()
     plt.savefig(f"{SAVEDIR}/ridge4.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
@@ -185,7 +181,7 @@ def dark_theme():
     plt.figure()
     # Sets axes and labels of given axis to white
     plastik.dark_theme(plt.gca())
-    plastik.log_tick_format(plt.gca(), "both", base=2)
+    plt.loglog(base=2)
     plt.plot(y)
     plt.xlabel("white label")
     plt.ylabel("ylabel")
@@ -281,4 +277,8 @@ def color_map():
 
 
 if __name__ == "__main__":
+    log_tick_format()
+    topside_legends()
+    ridge()
+    dark_theme()
     color_map()
