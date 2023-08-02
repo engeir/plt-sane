@@ -26,7 +26,6 @@ poetry install
 ### Functions
 
 - `dark_theme`
-- `log_tick_format`
 - `topside_legends`
 
 ### Classes
