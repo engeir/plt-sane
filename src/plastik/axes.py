@@ -1,5 +1,6 @@
 """Manipulate the axis of matplotlib figures."""
 
+import warnings
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -67,6 +68,12 @@ def log_tick_format(axes: plt.Axes, which: str, base: float = 10) -> plt.Axes:
     ValueError
         If `which` is not 'both', 'x' or 'y'.
     """
+    warnings.warn(
+        "DEPRECATION WARNING: This function will be removed in the next minor release,"
+        " v0.5.0. Instead, the formatting is taken care of from the 'default.mplstyle'"
+        " file, where setting `plt.rcParams['axes.formatter.min_exponent'] = 2` gives a"
+        " much improved result."
+    )
     if which == "both":
         axs, pltype = ["xaxis", "yaxis"], "loglog"
     elif which == "x":
@@ -82,13 +89,15 @@ def log_tick_format(axes: plt.Axes, which: str, base: float = 10) -> plt.Axes:
         f = getattr(axes, ax)
         f.set_major_formatter(
             ticker.FuncFormatter(
-                lambda x, _: "{:g}".format(x)
-                if np.log(x) / np.log(base) in [0, 1]
-                else r"$"
-                + str(base)
-                + "^{"
-                + "{:g}".format(np.log(x) / np.log(base))
-                + r"}$"
+                lambda x, _: (
+                    "{:g}".format(x)
+                    if np.log(x) / np.log(base) in [0, 1]
+                    else r"$"
+                    + str(base)
+                    + "^{"
+                    + "{:g}".format(np.log(x) / np.log(base))
+                    + r"}$"
+                )
             )
         )
     return axes
