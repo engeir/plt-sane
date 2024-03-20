@@ -1,3 +1,5 @@
+"""Module for working with colours."""
+
 import inspect
 import sys
 from typing import Literal, Sequence, overload
@@ -13,15 +15,13 @@ import pywaffle
 @overload
 def create_colorlist(
     color_specifier: Sequence | str, n: int, map: Literal[False] = False
-) -> list[str]:
-    ...
+) -> list[str]: ...
 
 
 @overload
 def create_colorlist(
     color_specifier: Sequence | str, n: int, map: Literal[True]
-) -> mpl.colors.Colormap:
-    ...
+) -> mpl.colors.Colormap: ...
 
 
 def create_colorlist(
@@ -62,12 +62,12 @@ def create_colorlist(
     AttributeError
         If the type of the ``color_specifier`` is not recognized.
 
-    See also
+    See Also
     --------
-    `Palettable<https://jiffyclub.github.io/palettable/#documentation>`_ is a collection
+    `Palettable<https : //jiffyclub.github.io/palettable/#documentation>`_ is a collection
     of predefined colour maps that include the matplotlib colours, cmcrameri colours and
     many more (colour maps from the Wes Anderson movies being one of them!). Let us look
-    at an example::
+    at an example : :
 
         import matplotlib.pyplot as plt
         from palettable.wesanderson import Moonrise1_5 as wes_clr
@@ -131,11 +131,11 @@ def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[st
             s1, s2 = str(e).split(" supported values are ")
             print("Supported colour names are:")
             for word in s2.split(", "):
-                word = word[1:-1]
-                if word.startswith("cmc"):
-                    print("\t", word, "\t(from cmcrameri)")
+                word_ = word[1:-1]
+                if word_.startswith("cmc"):
+                    print("\t", word_, "\t(from cmcrameri)")
                 else:
-                    print("\t", word)
+                    print("\t", word_)
         sys.exit()
     if map:
         return plt.get_cmap(cmap_name, n)
@@ -178,6 +178,7 @@ def _create_colorlist_between(colors: Sequence, n: int, map: bool = False) -> li
 
 
 def palettable_help() -> None:
+    """Print helt text about the `palettable` package."""
     print(
         "This package includes `palettable` as a dependency, but do not implement any"
         " of its colour maps. Rather, have a look at their documentation at"
@@ -199,7 +200,7 @@ def palettable_help() -> None:
             print("\t", i[0])
 
 
-def make_color_swatch(
+def make_color_swatch(  # noqa: PLR0913
     ax: plt.Axes,
     c_bar: mpl.colors.Colormap | list[str],
     vertical: bool = False,

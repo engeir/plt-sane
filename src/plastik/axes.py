@@ -1,12 +1,13 @@
 """Manipulate the axis of matplotlib figures."""
 
-from typing import Optional
-
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
 def dark_theme(
-    *ax: plt.Axes, fig: Optional[plt.Figure] = None, keep_yaxis: bool = False
+    *ax: mpl.axes.Axes,
+    fig: mpl.figure.Figure | None = None,
+    keep_yaxis: bool = False,
 ) -> None:
     """Change plot style to fit a dark background.
 
@@ -14,11 +15,11 @@ def dark_theme(
 
     Parameters
     ----------
-    ax: plt.Axes
+    *ax : mpl.axes.Axes
         Send in any number of matplotlib axes and the changes will be applied to all
-    fig: plt.Figure, optional
+    fig : mpl.figure.Figure | None, optional
         The figure object that should be altered
-    keep_yaxis: bool
+    keep_yaxis : bool
         Keep the colour of the label along the vertical axis as is.
         Useful if a plot has y-labels that are coloured to match the plotted
         lines. Defaults to False.

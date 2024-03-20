@@ -4,6 +4,7 @@ import itertools
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attr
+import matplotlib as mpl
 import matplotlib.gridspec as grid_spec
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,9 +18,9 @@ class Ridge:
 
     Parameters
     ----------
-    data: List
+    data : List
         A list of n 2-tuples with (x, y)-pairs; list of n np.ndarrays: (y)
-    options: str
+    options : str
         String with characters that set different options. This include 'b' (blank), 'c'
         (crop x-axis), 'g' (grid), 's' (slalom axis) and 'z' (squeeze). Blank removes
         all axis lines and turns the grid off. Crop sets the x-axis to the smallest
@@ -29,18 +30,18 @@ class Ridge:
         contiguous). The options are combined in a single string in arbitrary order. Any
         other characters than 'bcgsz' can be included without having any effect, the
         class with just look for existence of any of 'bcgsz'.
-    y_scale: float
+    y_scale : float
         Scale of y-axis relative to the default which decides the total height of the
         figure. Defaults to 1.
-    xlabel: str
+    xlabel : str
         x-label placed at the bottom.
-    ylabel: str
+    ylabel : str
         y-label for all y-axis.
-    ylim: List
+    ylim : List
         List containing the upper and lower y-axis limit in all ridges.
-    pltype: str
+    pltype : str
         plt class (loglog, plot, semilogx etc.) Defaults to plot.
-    kwargs: Dict
+    kwargs : Dict
         Any keyword argument plt.plot accepts. (Need to be a dict, asterisk syntax not
         supported.)
     """
@@ -66,6 +67,7 @@ class Ridge:
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
 
     def set_grid(self) -> None:
+        """Set the gridstructure of the figure."""
         fsize = (4, self.y_scale * len(self.data))
         self.gs = grid_spec.GridSpec(len(self.data), 1)
         self.__fig = plt.figure(figsize=fsize)
@@ -78,9 +80,10 @@ class Ridge:
             self.gs.update(hspace=0.0)
 
     def set_xaxs(self) -> None:
+        """Set the x-axis limits."""
         if self.xlim:
             x_min, x_max = self.xlim
-        elif len(self.data[0]) != 2:
+        elif len(self.data[0]) != 2:  # noqa: PLR2004
             x_min, x_max = -0.5, len(self.data[0]) - 0.5
             x_min = 0.5 if self.pltype in ["loglog", "semilogx"] else x_min
         elif "c" in self.options:
@@ -93,6 +96,7 @@ class Ridge:
     def set_ylabel(
         self, y_min: Optional[float] = None, y_max: Optional[float] = None
     ) -> None:
+        """Set the y-axis label."""
         if y_min is None or y_max is None:
             self.ax = self.__fig.add_subplot(111, frame_on=False)
             self.ax.tick_params(
@@ -230,7 +234,7 @@ class Ridge:
     def __draw_lines(self, s, col) -> None:
         # Plot data
         p_func = getattr(self.ax_objs[-1], self.pltype)
-        if len(s) == 2:
+        if len(s) == 2:  # noqa: PLR2004
             ell = p_func(s[0], s[1], color=col, markersize=2.5, **self.kwargs)[0]
         else:
             ell = p_func(s, color=col, markersize=2.5, **self.kwargs)[0]
@@ -239,14 +243,15 @@ class Ridge:
         self.__lines.append(ell)
 
     def data_loop(self) -> Tuple[float, float]:
+        """Run the data loop."""
         # Loop through data
         self.__lines: List[plt.Line2D] = []
         y_min = np.inf
         y_max = -np.inf
         for i, s in enumerate(self.data):
             col = next(self.colors)
-            y_min, y_max, s, spines = self.__setup_axis(y_min, y_max, i, s)
-            self.__draw_lines(s, col)
+            y_min, y_max, s_, spines = self.__setup_axis(y_min, y_max, i, s)
+            self.__draw_lines(s_, col)
             self.ax_objs[-1].patch.set_alpha(0)
             # Scale all subplots to the same x axis
             plt.xlim([self.__xmin, self.__xmax])
@@ -291,29 +296,36 @@ class Ridge:
 
     @property
     def lines(self) -> List:
+        """Return the plotted lines."""
         return self.__lines
 
     @property
-    def figure(self) -> plt.Figure:
+    def figure(self) -> mpl.figure.Figure:
+        """Return the figure."""
         return self.__fig
 
     @property
-    def top_axes(self) -> plt.Axes:
+    def top_axes(self) -> mpl.axes.Axes:
+        """Return the top axes."""
         return self.ax_objs[0]
 
     @property
-    def bottom_axes(self) -> plt.Axes:
+    def bottom_axes(self) -> mpl.axes.Axes:
+        """Return the bottom axes."""
         return self.ax_objs[-1]
 
     @property
-    def ylabel_axis(self) -> plt.Axes:
+    def ylabel_axis(self) -> mpl.axes.Axes:
+        """Return axis with y-label."""
         return self.ax
 
     @property
-    def all_axes(self) -> List[plt.Axes]:
+    def all_axes(self) -> List[mpl.axes.Axes]:
+        """Return all the axes."""
         return self.ax_objs
 
     def main(self) -> None:
+        """Run the main function."""
         self.set_grid()
         self.set_xaxs()
         if self.ylabel:
@@ -326,10 +338,17 @@ class Ridge:
 if __name__ == "__main__":
     x = np.linspace(1e-1, 3e1, 1000) ** 2
 
-    def func(x, s):
+    def _func(x, s):
         return 10 / ((x - s) ** 2 + 1)
 
-    dt = [func(x, 3), func(x, 1), func(x, 0), func(x, 100), func(x, 300), func(x, 500)]
+    dt = [
+        _func(x, 3),
+        _func(x, 1),
+        _func(x, 0),
+        _func(x, 100),
+        _func(x, 300),
+        _func(x, 500),
+    ]
     dta = [(x, a) for a in dt]
     lab = [f"{i}" for i in range(6)]
     kws = {"ls": "-."}
@@ -342,6 +361,6 @@ if __name__ == "__main__":
     axs = r.all_axes
     at.legend(ell, lab)
     plastik.topside_legends(ab, ell, lab, c_max=2, side="bottom left")
-    for ax in axs:
-        plastik.log_tick_format(ax, which="x")
+    # for ax in axs:
+    #     plastik.log_tick_format(ax, which="x")
     plt.show()
