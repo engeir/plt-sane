@@ -13,12 +13,12 @@
 pip install plastik
 ```
 
-Installing the development version is done using [poetry]:
+Installing the development version is done using [rye]:
 
 ```bash
 git clone https://github.com/engeir/plastik.git
 cd plastik
-poetry install
+rye sync
 ```
 
 ## Usage
@@ -41,4 +41,4 @@ See [examples](./examples/example.py).
 - Add and set up tests in pre-commit
 
 [PyPI]: https://pypi.org/
-[poetry]: https://python-poetry.org
+[rye]: https://rye-up.com/
