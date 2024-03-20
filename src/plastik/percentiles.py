@@ -64,14 +64,14 @@ def percentiles(  # noqa: PLR0913
     color = kwargs.pop("color") if "color" in kwargs else "r"
     line_color = kwargs.pop("line_color") if "line_color" in kwargs else "k"
     if plot_mean:
-        plt.plot(x, np.mean(y, axis=0), color=line_color)
+        ax.plot(x, np.mean(y, axis=0), color=line_color)
 
     if plot_median:
-        plt.plot(x, np.median(y, axis=0), "-d", color=line_color)
+        ax.plot(x, np.median(y, axis=0), "-d", color=line_color)
 
     alpha = kwargs.pop("alpha") if "alpha" in kwargs else 1 / n
     # fill lower and upper percentile groups
     for p1, p2 in zip(perc1, perc2, strict=True):
-        plt.fill_between(x, p1, p2, alpha=alpha, color=color, edgecolor=None)
+        ax.fill_between(x, p1, p2, alpha=alpha, color=color, edgecolor=None)
 
     return ax
