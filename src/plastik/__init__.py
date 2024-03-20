@@ -1,6 +1,6 @@
 """Library for creating beautiful and insightful visualizations."""
 
-from importlib_metadata import version
+from importlib.metadata import version
 
 from plastik import colors
 from plastik.axes import *  # noqa:F401,F403

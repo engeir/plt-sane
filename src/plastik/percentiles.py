@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def percentiles(
+def percentiles(  # noqa: PLR0913
     x: np.ndarray,
     y: np.ndarray,
     n: int = 20,
@@ -27,7 +27,7 @@ def percentiles(
     n : int
         The number of percentiles, linearly spaced from 50 to 'percentile_m{in,ax}'.
         Defaults to 20.
-    ax : mpl.axes.Axes, optional
+    ax : mpl.axes.Axes | None, optional
         The axes object to plot on. If not given, the current axes will be used.
     plot_mean : bool
         Plot mean of 'y'
