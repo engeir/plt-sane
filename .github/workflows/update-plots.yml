@@ -52,8 +52,10 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.BOT_TOKEN }}
+          committer: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           branch: temporary-branch-for-plots
-          base: release # Target branch
-          title: Update generated plots
-          body: This PR updates the generated plots.
+          title: "[bot] Update generated plots"
+          body: ":robot: This PR updates the generated plots."
           delete-branch: true # Deletes the temporary branch after merge
+          draft: true
