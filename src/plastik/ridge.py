@@ -1,7 +1,7 @@
 """Creates a ridge plot figure."""
 
 import itertools
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import attr
 import matplotlib as mpl
@@ -46,7 +46,7 @@ class Ridge:
         supported.)
     """
 
-    data: List[Any] = attr.ib()
+    data: list[Any] = attr.ib()
 
     @data.validator
     def _check_data_type(self, _, value):
@@ -58,12 +58,12 @@ class Ridge:
 
     options: str = attr.ib(converter=str)
     y_scale: float = attr.ib(converter=float, default=1.0)
-    xlabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
-    ylabel: Optional[str] = attr.ib(converter=str, kw_only=True, default="")
-    xlim: List[float] = attr.Factory(list)
-    ylim: List[float] = attr.Factory(list)
+    xlabel: str | None = attr.ib(converter=str, kw_only=True, default="")
+    ylabel: str | None = attr.ib(converter=str, kw_only=True, default="")
+    xlim: list[float] = attr.Factory(list)
+    ylim: list[float] = attr.Factory(list)
     pltype: str = attr.ib(converter=str, default="plot")
-    kwargs: Dict[str, Any] = attr.Factory(dict)
+    kwargs: dict[str, Any] = attr.Factory(dict)
     colors = itertools.cycle(plt.rcParams["axes.prop_cycle"].by_key()["color"])
 
     def set_grid(self) -> None:
@@ -73,7 +73,7 @@ class Ridge:
         self.__fig = plt.figure(figsize=fsize)
         # Set line type of horizontal grid lines
         self.gls = itertools.cycle(["-", "--"])
-        self.ax_objs: List[plt.Axes] = []
+        self.ax_objs: list[mpl.axes.Axes] = []
         if "z" in self.options:
             self.gs.update(hspace=-0.5)
         else:
@@ -94,7 +94,7 @@ class Ridge:
         self.__xmax = x_max
 
     def set_ylabel(
-        self, y_min: Optional[float] = None, y_max: Optional[float] = None
+        self, y_min: float | None = None, y_max: float | None = None
     ) -> None:
         """Set the y-axis label."""
         if y_min is None or y_max is None:
@@ -122,10 +122,10 @@ class Ridge:
         if self.pltype != "plot":
             pltype = "log" if self.pltype in ["semilogy", "loglog"] else "linear"
             self.ax.set_yscale(pltype)
-        self.ax.set_ylabel(self.ylabel)
+        self.ax.set_ylabel(self.ylabel if isinstance(self.ylabel, str) else "")
         y_min = 1e-3 if self.pltype == "log" and y_min <= 0 else y_min
-        ylim = self.ylim or [y_min, y_max]
-        self.ax.set_ylim(ylim)
+        ylim = self.ylim or (y_min, y_max)
+        self.ax.set_ylim(tuple(ylim))
 
     def __blank(self) -> None:
         spine = ["top", "bottom", "left", "right"]
@@ -215,10 +215,8 @@ class Ridge:
         y_min: float,
         y_max: float,
         i: int,
-        s: Union[Tuple[np.ndarray, np.ndarray], np.ndarray],
-    ) -> Tuple[
-        float, float, Union[Tuple[np.ndarray, np.ndarray], np.ndarray], List[str]
-    ]:
+        s: tuple[np.ndarray, np.ndarray] | np.ndarray,
+    ) -> tuple[float, float, tuple[np.ndarray, np.ndarray] | np.ndarray, list[str]]:
         self.ax_objs.append(self.__fig.add_subplot(self.gs[i : i + 1, 0:]))
         if i == 0:
             spines = ["bottom"]
@@ -242,10 +240,10 @@ class Ridge:
         # Append in line-list to create legend
         self.__lines.append(ell)
 
-    def data_loop(self) -> Tuple[float, float]:
+    def data_loop(self) -> tuple[float, float]:
         """Run the data loop."""
         # Loop through data
-        self.__lines: List[plt.Line2D] = []
+        self.__lines: list[mpl.lines.Line2D] = []
         y_min = np.inf
         y_max = -np.inf
         for i, s in enumerate(self.data):
@@ -266,9 +264,9 @@ class Ridge:
                 self.__resolve_options(i, spines, col)
         return y_min, y_max
 
-    def __x_limit(self, maxx=True) -> Tuple[float, float]:
+    def __x_limit(self, maxx=True) -> tuple[float, float]:
         if isinstance(self.data[0], tuple):
-            data: List[np.ndarray] = [d[0] for d in self.data]
+            data: list[np.ndarray] = [d[0] for d in self.data]
         else:
             raise ValueError("'data' must have x-values.")
         t_min = data[0]
@@ -295,7 +293,7 @@ class Ridge:
         return x_min, x_max
 
     @property
-    def lines(self) -> List:
+    def lines(self) -> list:
         """Return the plotted lines."""
         return self.__lines
 
@@ -320,7 +318,7 @@ class Ridge:
         return self.ax
 
     @property
-    def all_axes(self) -> List[mpl.axes.Axes]:
+    def all_axes(self) -> list[mpl.axes.Axes]:
         """Return all the axes."""
         return self.ax_objs
 

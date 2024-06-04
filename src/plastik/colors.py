@@ -2,7 +2,8 @@
 
 import inspect
 import sys
-from typing import Literal, Sequence, overload
+from collections.abc import Sequence
+from typing import Literal, overload
 
 import cmcrameri  # noqa
 import matplotlib as mpl
@@ -100,7 +101,9 @@ def create_colorlist(
     raise AttributeError("'color_specifier' must be either a list or a string.")
 
 
-def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[str]:
+def _create_colorlist_from(
+    cmap_name: str, n: int, map: bool = False
+) -> list[str] | mpl.colors.Colormap:
     """Create `n` colors that are drawn from one of the matplotlib color maps.
 
     Parameters
@@ -121,7 +124,7 @@ def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[st
 
     Returns
     -------
-    list[str]
+    list[str] | mpl.colors.Colormap
         A list of `n` colors in HEX format.
     """
     if cmap_name == "help":
@@ -142,7 +145,9 @@ def _create_colorlist_from(cmap_name: str, n: int, map: bool = False) -> list[st
     return [mpl.colors.to_hex(c) for c in plt.get_cmap(cmap_name, n)(range(n))]
 
 
-def _create_colorlist_between(colors: Sequence, n: int, map: bool = False) -> list[str]:
+def _create_colorlist_between(
+    colors: Sequence, n: int, map: bool = False
+) -> list[str] | mpl.colors.LinearSegmentedColormap:
     """Create `n` colors between two colors (inclusive).
 
     Parameters
@@ -164,7 +169,7 @@ def _create_colorlist_between(colors: Sequence, n: int, map: bool = False) -> li
 
     Returns
     -------
-    list[str]
+    list[str] | mpl.colors.LinearSegmentedColormap
         The hex values of all generated colors.
     """
     if map:
@@ -201,19 +206,19 @@ def palettable_help() -> None:
 
 
 def make_color_swatch(  # noqa: PLR0913
-    ax: plt.Axes,
+    ax: mpl.axes.Axes,
     c_bar: mpl.colors.Colormap | list[str],
     vertical: bool = False,
     resolution: int = 90,
     ratio: int = 8,
     no_border: bool = False,
     no_ticks: bool = True,
-) -> plt.Axes:
+) -> mpl.axes.Axes:
     """Create a color swatch on the given axis object from the given color map.
 
     Parameters
     ----------
-    ax : plt.Axes
+    ax : mpl.axes.Axes
         The axis object to create the colour bar on.
     c_bar : mpl.colors.Colormap | list[str]
         A color map to draw colors from or a list of all colour that should be used.
@@ -238,7 +243,7 @@ def make_color_swatch(  # noqa: PLR0913
 
     Returns
     -------
-    plt.Axes
+    mpl.axes.Axes
         Return the input axes object.
 
     Examples

@@ -1,6 +1,8 @@
-# plastik
+"""Example scripts for the `plastik` package."""
 
 # General imports
+import pathlib
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,23 +10,25 @@ from palettable.wesanderson import FantasticFox2_5
 
 import plastik
 
-SAVEDIR = "examples/figures"
+SAVEDIR = pathlib.Path("examples/figures")
+if not SAVEDIR.exists():
+    SAVEDIR.mkdir(parents=True)
 
 # Set the plotting style using the `default.mplstyle` file.
 mpl.style.use("plastik.default")
 # Log tick format -------------------------------------------------------------------- #
 
 
-def log_tick_format():
+def _log_tick_format():
     # 1
     y = np.exp(np.linspace(-3, 5, 100))
     base = 2  # Default is 10, but 2 works equally well
     plt.figure()
     plt.semilogx(base=base)
     plt.plot(y)
-    plt.savefig(f"{SAVEDIR}/log_tick_format1.png")
+    plt.savefig(SAVEDIR / "log_tick_format1.png")
     plastik.dark_theme(plt.gca(), fig=plt.gcf())
-    plt.savefig(f"{SAVEDIR}/log_tick_format1_dark.png")
+    plt.savefig(SAVEDIR / "log_tick_format1_dark.png")
     plt.show()
     plt.close("all")
 
@@ -35,9 +39,9 @@ def log_tick_format():
     ax = fig.add_subplot(111)
     ax.loglog(base=base)
     ax.plot(y)
-    plt.savefig(f"{SAVEDIR}/log_tick_format2.png")
+    plt.savefig(SAVEDIR / "log_tick_format2.png")
     plastik.dark_theme(ax, fig=fig)
-    plt.savefig(f"{SAVEDIR}/log_tick_format2_dark.png")
+    plt.savefig(SAVEDIR / "log_tick_format2_dark.png")
     plt.show()
     plt.close("all")
 
@@ -46,9 +50,9 @@ def log_tick_format():
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.semilogy(y)
-    plt.savefig(f"{SAVEDIR}/log_tick_format3.png")
+    plt.savefig(SAVEDIR / "log_tick_format3.png")
     plastik.dark_theme(ax, fig=fig)
-    plt.savefig(f"{SAVEDIR}/log_tick_format3_dark.png")
+    plt.savefig(SAVEDIR / "log_tick_format3_dark.png")
     plt.show()
     plt.close("all")
 
@@ -56,7 +60,7 @@ def log_tick_format():
 # Topside legends -------------------------------------------------------------------- #
 
 
-def topside_legends():
+def _topside_legends():
     # 1
     y = np.linspace(-3, 5, 100)
     fig = plt.figure()
@@ -66,9 +70,9 @@ def topside_legends():
     ax.plot(y + 2, label="Topside legend 3")
     ax.plot(y + 3, label="Topside legend 4")
     plastik.topside_legends(ax, c_max=2, side="bottom", alpha=0.2)
-    plt.savefig(f"{SAVEDIR}/topside_legends1.png")
+    plt.savefig(SAVEDIR / "topside_legends1.png")
     plastik.dark_theme(ax, fig=fig)
-    plt.savefig(f"{SAVEDIR}/topside_legends1_dark.png")
+    plt.savefig(SAVEDIR / "topside_legends1_dark.png")
     plt.show()
     plt.close("all")
 
@@ -81,9 +85,9 @@ def topside_legends():
     ax.plot(y + 2, label="Topside legend 3")
     ax.plot(y + 3, label="Topside legend 4")
     plastik.topside_legends(ax, c_max=3, side="top right", alpha=1)
-    plt.savefig(f"{SAVEDIR}/topside_legends2.png")
+    plt.savefig(SAVEDIR / "topside_legends2.png")
     plastik.dark_theme(ax, fig=fig)
-    plt.savefig(f"{SAVEDIR}/topside_legends2_dark.png")
+    plt.savefig(SAVEDIR / "topside_legends2_dark.png")
     plt.show()
     plt.close("all")
 
@@ -91,7 +95,7 @@ def topside_legends():
 # Ridge ------------------------------------------------------------------------------ #
 
 
-def ridge():
+def _ridge():  # noqa: PLR0915
     # Set up
     x = np.linspace(1e-1, 3e1, 1000) ** 2
 
@@ -114,7 +118,7 @@ def ridge():
     plt.savefig(f"{SAVEDIR}/ridge1.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
-    plt.savefig(f"{SAVEDIR}/ridge1_dark.png")
+    plt.savefig(SAVEDIR / "ridge1_dark.png")
     plt.show()
     plt.close("all")
 
@@ -129,10 +133,10 @@ def ridge():
     plastik.topside_legends(a, ell, c_max=6, side="right")
     for ax in axs:
         ax.semilogy()
-    plt.savefig(f"{SAVEDIR}/ridge2.png")
+    plt.savefig(SAVEDIR / "ridge2.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
-    plt.savefig(f"{SAVEDIR}/ridge2_dark.png")
+    plt.savefig(SAVEDIR / "ridge2_dark.png")
     plt.show()
     plt.close("all")
 
@@ -149,10 +153,10 @@ def ridge():
     plastik.topside_legends(a, ell, c_max=5, side="right")
     for ax in axs:
         ax.semilogx()
-    plt.savefig(f"{SAVEDIR}/ridge3.png")
+    plt.savefig(SAVEDIR / "ridge3.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
-    plt.savefig(f"{SAVEDIR}/ridge3_dark.png")
+    plt.savefig(SAVEDIR / "ridge3_dark.png")
     plt.show()
     plt.close("all")
 
@@ -164,10 +168,10 @@ def ridge():
     axs = r.all_axes
     for ax in axs:
         ax.loglog()
-    plt.savefig(f"{SAVEDIR}/ridge4.png")
+    plt.savefig(SAVEDIR / "ridge4.png")
     plastik.dark_theme(r.bottom_axes, keep_yaxis=True, fig=f)
     plastik.dark_theme(r.ax)
-    plt.savefig(f"{SAVEDIR}/ridge4_dark.png")
+    plt.savefig(SAVEDIR / "ridge4_dark.png")
     plt.show()
     plt.close("all")
 
@@ -175,7 +179,7 @@ def ridge():
 # Dark theme ------------------------------------------------------------------------- #
 
 
-def dark_theme():
+def _dark_theme():
     # 1
     y = np.exp(np.linspace(-3, 5, 100))
     plt.figure()
@@ -185,13 +189,13 @@ def dark_theme():
     plt.plot(y)
     plt.xlabel("white label")
     plt.ylabel("ylabel")
-    plt.savefig(f"{SAVEDIR}/dark_theme.png")
+    plt.savefig(SAVEDIR / "dark_theme.png")
     plt.show()
     plt.close("all")
 
 
 # Color map -------------------------------------------------------------------------- #
-def color_map():
+def _color_map():
     plastik.colors.palettable_help()
     plastik.colors.make_color_swatch(
         plt.figure(figsize=(12, 3)).gca(),
@@ -207,7 +211,7 @@ def color_map():
     print([mpl.colors.to_hex(c) for c in color_map(range(50))])
     # All colors in the map
     color_list = [mpl.colors.to_hex(c) for c in color_map(range(20))]
-    print(all(j == k for j, k in zip(prints, color_list)))  # True
+    print(all(j == k for j, k in zip(prints, color_list, strict=False)))  # True
     # A new map based on raw input (first five from gist_rainbow, n=20) is created and
     # samples are drawn from it.
     print(first_five)
@@ -236,11 +240,11 @@ def color_map():
         np.ones(20),
         c=custom_colors_map(range(20)),
     )
-    ax2 = ax.inset_axes([x0, y0, width, height])
+    ax2 = ax.inset_axes((x0, y0, width, height))
     ax2 = plastik.colors.make_color_swatch(
         ax2, custom_colors_map, no_ticks=False, ratio=5
     )
-    ax2.set_xticks([0, 30, 60, 90], [0, "hey", True, 2], size=6)
+    ax2.set_xticks((0, 30, 60, 90), (0, "hey", True, 2), size=6)  # type: ignore[arg-type]
     ax2.set_yticks([])
     plt.show()
 
@@ -270,15 +274,15 @@ def color_map():
         np.ones(len(custom)),
         c=custom,
     )
-    ax2 = ax.inset_axes([x0, y0, width, height])
+    ax2 = ax.inset_axes((x0, y0, width, height))
     plastik.colors.make_color_swatch(ax2, custom, ratio=2 * len(custom))
-    ax2.set_xticks([0, 3, 6, 17, 20], [0, "Zzz", "See", "Stop", 2], rotation=20, size=6)
+    ax2.set_xticks((0, 3, 6, 17, 20), (0, "Zzz", "See", "Stop", 2), rotation=20, size=6)  # type: ignore[arg-type]
     plt.show()
 
 
 if __name__ == "__main__":
-    log_tick_format()
-    topside_legends()
-    ridge()
-    dark_theme()
-    color_map()
+    _log_tick_format()
+    _topside_legends()
+    _ridge()
+    _dark_theme()
+    _color_map()
