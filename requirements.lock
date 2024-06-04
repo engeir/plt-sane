@@ -6,27 +6,28 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
 attrs==23.2.0
     # via plastik
-cmcrameri==1.8
+cmcrameri==1.9
     # via plastik
-contourpy==1.1.1
+contourpy==1.2.1
     # via matplotlib
 cycler==0.12.1
     # via matplotlib
 fontawesomefree==6.5.1
     # via pywaffle
-fonttools==4.50.0
+fonttools==4.53.0
     # via matplotlib
 kiwisolver==1.4.5
     # via matplotlib
-matplotlib==3.7.5
+matplotlib==3.9.0
     # via cmcrameri
     # via plastik
     # via pywaffle
-numpy==1.24.4
+numpy==1.26.4
     # via cmcrameri
     # via contourpy
     # via matplotlib
@@ -36,7 +37,7 @@ packaging==24.0
     # via matplotlib
 palettable==3.3.3
     # via plastik
-pillow==10.2.0
+pillow==10.3.0
     # via matplotlib
 pyparsing==3.1.2
     # via matplotlib
