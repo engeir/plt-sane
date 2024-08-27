@@ -30,6 +30,7 @@ class FigureGrid:
         self._pos: tuple[float, float] = (-0.2, 0.95)
         self._share_axes: Literal["x", "y", "both"] | None = None
         self._columns_first: bool = False
+        self._expand_top: float = 1.0
 
     def __call__(
         self: Self,
@@ -99,13 +100,14 @@ class FigureGrid:
             ]
         return labels
 
-    def using(
+    def using(  # noqa: PLR0913
         self: Self,
         *,
         labels: list[str] | None = None,
         pos: tuple[float, float] | None = None,
         share_axes: Literal["x", "y", "both"] | None = None,
         columns_first: bool | None = None,
+        expand_top: float | None = None,
     ) -> Self:
         """Set text properties.
 
@@ -123,6 +125,10 @@ class FigureGrid:
         columns_first : bool | None
             If the labels should be placed in a columns-first order. Default is `False`,
             meaning rows are numbered first.
+        expand_top : float | None
+            Make the figure higher by multiplying by `expand_top`. Note that the
+            subfigures will remain the same. Useful for placing a common legend at the
+            top of the figure.
 
         Returns
         -------
@@ -133,6 +139,7 @@ class FigureGrid:
         self._pos = pos or self._pos
         self._share_axes = share_axes or self._share_axes
         self._columns_first = columns_first or self._columns_first
+        self._expand_top = expand_top or self._expand_top
         return self
 
     def get_grid(
@@ -154,19 +161,19 @@ class FigureGrid:
             A list of all the axes objects owned by the figure
         """
         full_height, full_width = self._calculate_figsize()
-        fig = plt.figure(figsize=(full_width, full_height))
+        fig = plt.figure(figsize=(full_width, full_height * self._expand_top))
         axes = []
         labels = self._update_labels()
         for r in range(self.rows):
             if self._share_axes in {"x", "both"}:
-                rel_height = 0.75 + 0.25 / self.rows
-                height = 0.75 / self.rows / rel_height
-                bottom_pad = 0.2 / self.rows / rel_height
+                rel_height = 0.75 + 0.25 / self.rows / self._expand_top
+                height = 0.75 / self.rows / rel_height / self._expand_top
+                bottom_pad = 0.2 / self.rows / rel_height / self._expand_top
                 bottom = bottom_pad + height * (self.rows - 1 - r)
             else:
                 bottom_pad = 0.2 / self.rows
-                height = 0.75 / self.rows
-                bottom = bottom_pad + (self.rows - 1 - r) / self.rows
+                height = 0.75 / self.rows / self._expand_top
+                bottom = bottom_pad + (self.rows - 1 - r) / self.rows / self._expand_top
             for c in range(self.columns):
                 if self._share_axes in {"y", "both"}:
                     rel_width = 0.75 + 0.25 / self.columns
