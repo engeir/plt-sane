@@ -12,12 +12,13 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "numpy>=1.24.4",
-  "matplotlib>=3.7.5",
-  "attrs>=23.2.0",
-  "pywaffle>=1.1.0",
-  "cmcrameri>=1.8",
-  "palettable>=3.3.3",
+    "numpy>=1.24.4",
+    "matplotlib>=3.7.5",
+    "attrs>=23.2.0",
+    "pywaffle>=1.1.0",
+    "cmcrameri>=1.8",
+    "palettable>=3.3.3",
+    "typing-extensions>=4.12.2",
 ]
 
 [project.urls]
