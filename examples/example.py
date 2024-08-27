@@ -266,7 +266,7 @@ def _color_map():
     plt.figure(figsize=(10, 1), layout="constrained")
     plastik.colors.make_color_swatch(plt.gca(), custom, no_ticks=False)
     # As an inset with other data
-    plt.figure()
+    fig2 = plt.figure()
     ax = plt.gca()
     x0, y0, width, height = 0.57, 0.87, 0.40, 0.1
     ax.scatter(
@@ -277,6 +277,31 @@ def _color_map():
     ax2 = ax.inset_axes((x0, y0, width, height))
     plastik.colors.make_color_swatch(ax2, custom, ratio=2 * len(custom))
     ax2.set_xticks((0, 3, 6, 17, 20), (0, "Zzz", "See", "Stop", 2), rotation=20, size=6)  # type: ignore[arg-type]
+    fig2.savefig(SAVEDIR / "color_map.png")
+    plt.show()
+
+
+# Figure grid ------------------------------------------------------------------------ #
+def _figure_grid():
+    fig1, axs1 = plastik.figure_grid(2, 2)
+    for i, ax in enumerate(axs1):
+        ax.plot(np.array([1, 2, 3]), np.array([1, 2, 3]) * i)
+    fig1.savefig(SAVEDIR / "figure_grid_default.png")
+    # For further customisation of the text, use the class directly and the `get_grid`
+    # method with `kwargs`. You can for example change the anchor point of the text.
+    fig2, axs2 = plastik.figure_grid(
+        2,
+        2,
+        {
+            "labels": ["Hello subplot title", 1, r"$4\hbar$", None],
+            "pos": (0.6, 0.1),
+            "share_axes": "x",
+            "columns_first": True,
+        },
+    )
+    for i, ax in enumerate(axs2):
+        ax.plot(np.array([1, 2, 3]), np.array([1, 2, 3]) * i)
+    fig2.savefig(SAVEDIR / "figure_grid_opts.png")
     plt.show()
 
 
@@ -286,3 +311,4 @@ if __name__ == "__main__":
     _ridge()
     _dark_theme()
     _color_map()
+    _figure_grid()
