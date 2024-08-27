@@ -44,7 +44,7 @@ distlib==0.3.8
     # via virtualenv
 docstring-parser-fork==0.0.5
     # via pydoclint
-exceptiongroup==1.2.1 ; python_full_version < '3.11'
+exceptiongroup==1.2.2 ; python_full_version < '3.11'
     # via ipython
     # via pytest
 executing==2.0.1
