@@ -7,7 +7,6 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-
   - repo: local
     hooks:
       - id: check-added-large-files
@@ -15,35 +14,30 @@ repos:
         stages: [commit]
         entry: check-added-large-files
         language: system
-
       - id: ruff_format
-        name: ruff_format
+        name: Ruff format
         stages: [commit]
         language: system
-        entry: rye run ruff format --force-exclude src # tests
+        entry: rye run ruff format --force-exclude
         types: [python]
-
-      - id: ruff
-        name: ruff
+      - id: ruff_check
+        name: Ruff check
         stages: [commit]
         language: system
-        entry: rye run ruff check --fix --force-exclude src # tests
+        entry: rye run ruff check --fix --force-exclude
         types: [python]
-
       - id: xdoctest
         name: xdoctest
         stages: [commit]
         language: system
         entry: rye run xdoctest
         types: [python]
-
       - id: pydocstringformatter
         name: pydocstringformatter
         stages: [commit]
         language: system
-        entry: rye run pydocstringformatter src tests
+        entry: rye run pydocstringformatter
         types: [python]
-
       - id: mypy
         name: mypy
         stages: [commit]
@@ -51,7 +45,6 @@ repos:
         entry: rye run mypy
         types: [python]
         require_serial: true
-
       - id: pydoclint
         name: pydoclint
         stages: [commit]
@@ -60,10 +53,10 @@ repos:
         types: [python]
         require_serial: true
 
-      # - id: pytest
-      #   name: pytest
-      #   stages: [commit]
-      #   language: system
-      #   entry: rye run pytest tests
-      #   types: [python]
-      #   pass_filenames: false
+# - id: pytest
+#   name: pytest
+#   stages: [commit]
+#   language: system
+#   entry: rye run pytest tests
+#   types: [python]
+#   pass_filenames: false
