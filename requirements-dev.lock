@@ -173,9 +173,10 @@ traitlets==5.14.3
     # via jupyter-client
     # via jupyter-core
     # via matplotlib-inline
-typing-extensions==4.12.1
+typing-extensions==4.12.2
     # via ipython
     # via mypy
+    # via plastik
 virtualenv==20.26.2
     # via pre-commit
 wcwidth==0.2.13
