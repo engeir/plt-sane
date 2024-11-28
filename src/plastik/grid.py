@@ -92,13 +92,16 @@ class FigureGrid:
             if not self._labels or len(self._labels) != int(self.rows * self.columns)
             else self._labels.copy()
         )
+        return self._maybe_columns_first(labels)
+
+    def _maybe_columns_first(self: Self, list_: list) -> list:
         if self._columns_first:
-            labels = [
-                labels[i * self.rows + j]
+            list_ = [
+                list_[i * self.rows + j]
                 for j in range(self.rows)
                 for i in range(self.columns)
             ]
-        return labels
+        return list_
 
     def using(  # noqa: PLR0913
         self: Self,
@@ -196,6 +199,7 @@ class FigureGrid:
                     transform=axes[-1].transAxes,
                     **kwargs,
                 )
+        axes = self._maybe_columns_first(axes)
         return fig, axes
 
 
