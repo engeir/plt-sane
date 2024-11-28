@@ -23,22 +23,32 @@ rye sync
 
 ## Usage
 
-### Functions
+```python
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
 
-- `dark_theme`
-- `topside_legends`
+import plastik
 
-### Classes
+mpl.style.use("plastik.default")
+fig, axs = plastik.figure_grid(
+    2,
+    2,
+    {
+        "labels": ["Hello subplot title", 1, r"$4\hbar$", None],
+        "pos": (0.6, 0.1),
+        "share_axes": "x",
+        "columns_first": True,
+    },
+)
+for i, ax in enumerate(axs):
+    ax.plot(np.array([1, 2, 3]), np.array([1, 2, 3]) * i)
+fig.savefig("figure_grid_opts.png")
+plt.show()
+```
 
-- `Ridge`
-
-### Example use
-
-See [examples](./examples/example.py).
-
-## To do
-
-- Add and set up tests in pre-commit
+See more [examples](./examples/example.py) and their
+[output](https://github.com/engeir/plastik/pull/24/files).
 
 [PyPI]: https://pypi.org/
 [rye]: https://rye-up.com/
