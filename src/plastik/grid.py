@@ -94,14 +94,25 @@ class FigureGrid:
         )
         return self._maybe_columns_first(labels)
 
-    def _maybe_columns_first(self: Self, list_: list) -> list:
-        if self._columns_first:
-            list_ = [
-                list_[i * self.rows + j]
-                for j in range(self.rows)
-                for i in range(self.columns)
-            ]
-        return list_
+    def _maybe_columns_first(
+        self: Self, list_: list, *, transpose: bool = True
+    ) -> list:
+        if transpose:
+            if self._columns_first:
+                lst = [
+                    list_[i * self.rows + j]
+                    for j in range(self.rows)
+                    for i in range(self.columns)
+                ]
+            return lst
+        grid = [
+            list_[i * self.columns : (i + 1) * self.columns] for i in range(self.rows)
+        ]
+        lst = []
+        for col in range(self.columns):
+            for row in range(self.rows):
+                lst.append(grid[row][col])
+        return lst
 
     def using(  # noqa: PLR0913
         self: Self,
@@ -199,7 +210,7 @@ class FigureGrid:
                     transform=axes[-1].transAxes,
                     **kwargs,
                 )
-        axes = self._maybe_columns_first(axes)
+        axes = self._maybe_columns_first(axes, transpose=False)
         return fig, axes
 
 
