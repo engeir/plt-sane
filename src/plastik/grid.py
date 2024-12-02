@@ -98,13 +98,14 @@ class FigureGrid:
     def _maybe_columns_first(
         self: Self, list_: list, *, transpose: bool = True
     ) -> list:
+        if not self._columns_first:
+            return list_
         if transpose:
-            if self._columns_first:
-                list_ = [
-                    list_[i * self.rows + j]
-                    for j in range(self.rows)
-                    for i in range(self.columns)
-                ]
+            list_ = [
+                list_[i * self.rows + j]
+                for j in range(self.rows)
+                for i in range(self.columns)
+            ]
             return list_
         grid = [
             list_[i * self.columns : (i + 1) * self.columns] for i in range(self.rows)
