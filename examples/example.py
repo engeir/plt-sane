@@ -305,6 +305,30 @@ def _figure_grid():
     plt.show()
 
 
+# Airport ---------------------------------------------------------------------------- #
+def _airport():
+    t = np.linspace(0, 1, 101)
+    a = np.exp(t) + np.random.default_rng().normal(size=101) / 3
+    b = np.exp(t) + np.random.default_rng().normal(size=101) / 3 + 0
+    rnd = np.random.default_rng().normal(size=101)
+    ax1 = (fig1 := plt.figure()).gca()
+    plastik.airport(
+        a,
+        b,
+        rnd,
+        ax1,
+        labels=("$b-a$", "Control", None),
+        ax_labels=("Array: $a$ [Unit]", "Array: $b$ [Unit]", r"$\Delta$ Unit"),
+    )
+    fig1.savefig(SAVEDIR / "airport_default.png")
+    ax2 = (fig2 := plt.figure()).gca()
+    ap = plastik.Airport()
+    ap.config(distribution_xline=1, runway_data_kwargs={"c": "red", "marker": "s"})
+    ap.plot(a, b, rnd, ax2)
+    fig2.savefig(SAVEDIR / "airport_configured.png")
+    plt.show()
+
+
 if __name__ == "__main__":
     _log_tick_format()
     _topside_legends()
@@ -312,3 +336,4 @@ if __name__ == "__main__":
     _dark_theme()
     _color_map()
     _figure_grid()
+    _airport()
