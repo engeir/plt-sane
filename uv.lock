@@ -889,18 +889,22 @@ wheels = [
 
 [[package]]
 name = "plastik"
-version = "0.9.0"
+version = "0.9.1"
 source = { editable = "." }
 dependencies = [
     { name = "attrs" },
     { name = "cmcrameri" },
-    { name = "fppanalysis" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "palettable" },
     { name = "pywaffle" },
-    { name = "scipy" },
     { name = "typing-extensions" },
+]
+
+[package.optional-dependencies]
+extra = [
+    { name = "fppanalysis" },
+    { name = "scipy" },
 ]
 
 [package.dev-dependencies]
@@ -923,12 +927,12 @@ dev = [
 requires-dist = [
     { name = "attrs", specifier = ">=23.2.0" },
     { name = "cmcrameri", specifier = ">=1.8" },
-    { name = "fppanalysis", extras = ["extra"], git = "https://github.com/uit-cosmo/fpp-analysis-tools" },
+    { name = "fppanalysis", marker = "extra == 'extra'", git = "https://github.com/uit-cosmo/fpp-analysis-tools" },
     { name = "matplotlib", specifier = ">=3.7.5" },
     { name = "numpy", specifier = ">=1.24.4" },
     { name = "palettable", specifier = ">=3.3.3" },
     { name = "pywaffle", specifier = ">=1.1.0" },
-    { name = "scipy", extras = ["extra"], specifier = ">=1.14.1" },
+    { name = "scipy", marker = "extra == 'extra'", specifier = ">=1.14.1" },
     { name = "typing-extensions", specifier = ">=4.12.2" },
 ]
 
