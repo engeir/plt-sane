@@ -28,7 +28,7 @@ jobs:
             dvipng
       - name: Install dependencies with Uv
         run: |
-          uv sync --no-dev
+          uv sync --no-dev --extra=extra
       - name: Generate plots
         run: |
           uv run python ./examples/example.py
