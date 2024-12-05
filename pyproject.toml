@@ -20,14 +20,18 @@ dependencies = [
   "cmcrameri>=1.8",
   "palettable>=3.3.3",
   "typing-extensions>=4.12.2",
-  "scipy[extra]>=1.14.1",
-  "fppanalysis[extra]",
 ]
 
 [project.urls]
 homepage = "https://github.com/engeir/plastik"
 repository = "https://github.com/engeir/plastik"
 documentation = "https://plastik.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+extra = [
+    "fppanalysis",
+    "scipy>=1.14.1",
+]
 
 [build-system]
 requires = ["hatchling"]
