@@ -13,12 +13,12 @@
 pip install plastik
 ```
 
-Installing the development version is done using [rye]:
+Installing the development version is done using [uv]:
 
 ```bash
 git clone https://github.com/engeir/plastik.git
 cd plastik
-rye sync
+uv sync
 ```
 
 ## Usage
@@ -51,4 +51,4 @@ See more [examples](./examples/example.py) and their
 [output](https://github.com/engeir/plastik/pull/24/files).
 
 [PyPI]: https://pypi.org/
-[rye]: https://rye-up.com/
+[uv]: https://docs.astral.sh/uv/

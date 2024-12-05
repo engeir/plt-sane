@@ -14,38 +14,38 @@ repos:
         name: Ruff format
         stages: [pre-commit]
         language: system
-        entry: rye run ruff format --force-exclude
+        entry: uv run ruff format --force-exclude
         types: [python]
       - id: ruff_check
         name: Ruff check
         stages: [pre-commit]
         language: system
-        entry: rye run ruff check --fix --force-exclude
+        entry: uv run ruff check --fix --force-exclude
         types: [python]
       - id: xdoctest
         name: xdoctest
         stages: [pre-commit]
         language: system
-        entry: rye run xdoctest
+        entry: uv run xdoctest
         types: [python]
       - id: pydocstringformatter
         name: pydocstringformatter
         stages: [pre-commit]
         language: system
-        entry: rye run pydocstringformatter
+        entry: uv run pydocstringformatter
         types: [python]
       - id: mypy
         name: mypy
         stages: [pre-commit]
         language: system
-        entry: rye run mypy
+        entry: uv run mypy
         types: [python]
         require_serial: true
       - id: pydoclint
         name: pydoclint
         stages: [pre-commit]
         language: system
-        entry: rye run pydoclint # src tests
+        entry: uv run pydoclint # src tests
         types: [python]
         require_serial: true
 
@@ -53,6 +53,6 @@ repos:
 #   name: pytest
 #   stages: [commit]
 #   language: system
-#   entry: rye run pytest tests
+#   entry: uv run pytest tests
 #   types: [python]
 #   pass_filenames: false
