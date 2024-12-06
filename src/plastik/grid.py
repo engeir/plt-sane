@@ -25,11 +25,14 @@ class FigureGrid:
         rows: int | None = None,
         columns: int | None = None,
     ) -> None:
+        self._set_defaults(rows, columns)
+
+    def _set_defaults(self: Self, rows: int | None, columns: int | None) -> None:
         self.rows = 1 if rows is None else rows
         self.columns = 1 if columns is None else columns
         self._labels: list[str] | None = None
         self._pos: tuple[float, float] = (-0.2, 0.95)
-        self._share_axes: Literal["x", "y", "both"] | None = None
+        self._share_axes: Literal["x", "y", "both"] | bool = False
         self._columns_first: bool = False
         self._expand_top: float = 1.0
 
@@ -61,7 +64,7 @@ class FigureGrid:
         list[Axes]
             A list of all the axes objects owned by the figure.
         """
-        self.rows, self.columns = rows, columns
+        self._set_defaults(rows, columns)
         if using is not None:
             self.using(**using)
         return self.get_grid(**kwargs)
@@ -73,13 +76,13 @@ class FigureGrid:
         full_rows = 2.08277 * self.rows
         squash_rows = 2.08277 * self.rows - (self.rows - 1) * 2.08277 * 0.25
         match self._share_axes:
-            case None:
+            case False:
                 return full_rows, full_cols
             case "x":
                 return squash_rows, full_cols
             case "y":
                 return full_rows, squash_cols
-            case "both":
+            case True | "both":
                 return squash_rows, squash_cols
             case _:
                 raise ValueError(f"Unknown value for share_axes: {self._share_axes}")
@@ -120,7 +123,7 @@ class FigureGrid:
         *,
         labels: list[str] | None = None,
         pos: tuple[float, float] | None = None,
-        share_axes: Literal["x", "y", "both"] | None = None,
+        share_axes: Literal["x", "y", "both"] | bool | None = None,
         columns_first: bool | None = None,
         expand_top: float | None = None,
     ) -> Self:
@@ -135,8 +138,9 @@ class FigureGrid:
         pos : tuple[float, float] | None
             The position in the sub-figure relative to the bottom-left corner. Default
             is `(-0.2, 0.95)`.
-        share_axes : Literal["x", "y", "both"] | None
-            Use a shared axis for the given direction. Default is `None`.
+        share_axes : Literal["x", "y", "both"] | bool | None
+            Use a shared axis for the given direction. Default is `False`, meaning none
+            are shared.
         columns_first : bool | None
             If the labels should be placed in a columns-first order. Default is `False`,
             meaning rows are numbered first.
@@ -180,7 +184,7 @@ class FigureGrid:
         axes = []
         labels = self._update_labels()
         for r in range(self.rows):
-            if self._share_axes in {"x", "both"}:
+            if self._share_axes in {"x", "both", True}:
                 rel_height = 0.75 + 0.25 / self.rows / self._expand_top
                 height = 0.75 / self.rows / rel_height / self._expand_top
                 bottom_pad = 0.2 / self.rows / rel_height / self._expand_top
@@ -190,7 +194,7 @@ class FigureGrid:
                 height = 0.75 / self.rows / self._expand_top
                 bottom = bottom_pad + (self.rows - 1 - r) / self.rows / self._expand_top
             for c in range(self.columns):
-                if self._share_axes in {"y", "both"}:
+                if self._share_axes in {"y", "both", True}:
                     rel_width = 0.75 + 0.25 / self.columns
                     width = 0.75 / self.columns / rel_width
                     left_pad = 0.2 / self.columns / rel_width
@@ -200,9 +204,9 @@ class FigureGrid:
                     width = 0.75 / self.columns
                     left = left_pad + c / self.columns
                 axes.append(fig.add_axes((left, bottom, width, height)))
-                if self._share_axes in {"x", "both"} and r != self.rows - 1:
+                if self._share_axes in {"x", "both", True} and r != self.rows - 1:
                     axes[-1].set_xticklabels([])
-                if self._share_axes in {"y", "both"} and c != 0:
+                if self._share_axes in {"y", "both", True} and c != 0:
                     axes[-1].set_yticklabels([])
                 axes[-1].text(
                     self._pos[0],
