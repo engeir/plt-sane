@@ -183,4 +183,4 @@ numpydoc-section-hyphen-length = false
 style = ["pep257", "numpydoc"]
 
 [tool.uv.sources]
-fppanalysis = { git = "https://github.com/uit-cosmo/fpp-analysis-tools" }
+fppanalysis = { git = "https://github.com/uit-cosmo/fpp-analysis-tools", rev = "main" }

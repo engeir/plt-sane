@@ -409,7 +409,7 @@ wheels = [
 [[package]]
 name = "fppanalysis"
 version = "0.2.0"
-source = { git = "https://github.com/uit-cosmo/fpp-analysis-tools#6f98750636f11e1e239471bd7a88e88871060485" }
+source = { git = "https://github.com/uit-cosmo/fpp-analysis-tools?rev=main#6f98750636f11e1e239471bd7a88e88871060485" }
 dependencies = [
     { name = "matplotlib" },
     { name = "mpmath" },
@@ -927,7 +927,7 @@ dev = [
 requires-dist = [
     { name = "attrs", specifier = ">=23.2.0" },
     { name = "cmcrameri", specifier = ">=1.8" },
-    { name = "fppanalysis", marker = "extra == 'extra'", git = "https://github.com/uit-cosmo/fpp-analysis-tools" },
+    { name = "fppanalysis", marker = "extra == 'extra'", git = "https://github.com/uit-cosmo/fpp-analysis-tools?rev=main" },
     { name = "matplotlib", specifier = ">=3.7.5" },
     { name = "numpy", specifier = ">=1.24.4" },
     { name = "palettable", specifier = ">=3.3.3" },
