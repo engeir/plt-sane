@@ -1,6 +1,14 @@
 """Create an airport-plot on a ``matplotlib.axes.Axes`` object."""
 
+import importlib.metadata
 from collections.abc import Callable
+
+if importlib.metadata.version("fppanalysis") == "0.1.4":
+    raise ImportError(
+        "The package 'fppanalysis' cannot be at version 0.1.4. You may want to "
+        "explicitly install it to your project as "
+        "`git+https://github.com/uit-cosmo/fpp-analysis-tools@main`."
+    )
 
 import fppanalysis
 import matplotlib as mpl
