@@ -2,6 +2,7 @@
 _.python.venv = { path = ".venv", create = false }
 
 [tasks.bump]
+description = "Bump the python package version. Takes one argument: `major`, `minor` or `patch`."
 run = """
 #!/usr/bin/env bash
 
