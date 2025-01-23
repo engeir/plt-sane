@@ -286,6 +286,7 @@ def _figure_grid():
     fig1, axs1 = plastik.figure_grid(2, 2)
     for i, ax in enumerate(axs1):
         ax.plot(np.array([1, 2, 3]), np.array([1, 2, 3]) * i)
+        ax.set_ylabel(f"Y Label {i}")
     fig1.savefig(SAVEDIR / "figure_grid_default.png")
     # For further customisation of the text, use the class directly and the `get_grid`
     # method with `kwargs`. You can for example change the anchor point of the text.
@@ -297,10 +298,12 @@ def _figure_grid():
             "pos": (0.6, 0.1),
             "share_axes": "x",
             "columns_first": True,
+            "adjust_ylabel": 1.05,
         },
     )
     for i, ax in enumerate(axs2):
         ax.plot(np.array([1, 2, 3]), np.array([1, 2, 3]) * i)
+        ax.set_ylabel(f"Y Label {i}")
     fig2.savefig(SAVEDIR / "figure_grid_opts.png")
     plt.show()
 

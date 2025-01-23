@@ -35,6 +35,7 @@ class FigureGrid:
         self._share_axes: Literal["x", "y", "both"] | bool = False
         self._columns_first: bool = False
         self._expand_top: float = 1.0
+        self._adjust_ylabel: float = -0.15
 
     def __call__(
         self: Self,
@@ -126,6 +127,7 @@ class FigureGrid:
         share_axes: Literal["x", "y", "both"] | bool | None = None,
         columns_first: bool | None = None,
         expand_top: float | None = None,
+        adjust_ylabel: float | None = None,
     ) -> Self:
         """Set text properties.
 
@@ -148,6 +150,9 @@ class FigureGrid:
             Make the figure higher by multiplying by `expand_top`. Note that the
             subfigures will remain the same. Useful for placing a common legend at the
             top of the figure.
+        adjust_ylabel : float | None
+            Move all y-labels horizontally to make them both aligned with each other and
+            with the numbers on the tick-marks.
 
         Returns
         -------
@@ -159,6 +164,7 @@ class FigureGrid:
         self._share_axes = share_axes or self._share_axes
         self._columns_first = columns_first or self._columns_first
         self._expand_top = expand_top or self._expand_top
+        self._adjust_ylabel = adjust_ylabel or self._adjust_ylabel
         return self
 
     def get_grid(
@@ -216,7 +222,7 @@ class FigureGrid:
                     **kwargs,
                 )
                 axes[-1].yaxis.set_label_coords(
-                    self._pos[0] + 0.04, 0.5, transform=axes[-1].transAxes
+                    self._adjust_ylabel, 0.5, transform=axes[-1].transAxes
                 )
         axes = self._maybe_columns_first(axes, transpose=False)
         return fig, axes
