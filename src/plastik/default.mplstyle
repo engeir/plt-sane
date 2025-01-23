@@ -1,3 +1,4 @@
+# https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-default-matplotlibrc-file
 # Figure size and dpi
 figure.dpi: 300
 figure.figsize: 3.37, 2.08277
@@ -12,13 +13,12 @@ legend.framealpha: 1.0
 legend.fancybox: False
 legend.edgecolor: "k"
 patch.linewidth: 0.5 # For legend box borders
-# legend.handlelength : 1.45  # Show nice, even numbers for different line styles
+# legend.handlelength: 1.45  # Show nice, even numbers for different line styles
 legend.handlelength: 2.48 # In font-size units (8). 2.5 cover 32 pts. Works well with line styles defined `lines`
 # Font and text
 text.usetex: True
 pdf.fonttype: 42
-font.family: serif
-font.serif: cm
+font.family: "Latin Modern"
 font.size: 8
 axes.labelsize: 8
 legend.fontsize: 8
