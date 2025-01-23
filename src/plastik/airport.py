@@ -118,33 +118,30 @@ class Airport:
         dist_ctrl_kwargs : dict | None
             Keyword arguments to give to the distribution plot's control.
         """
-        if runway_data_kwargs is None:
-            _runway_data_kwargs = {
-                "marker": "*",
-                "c": "magenta",
-                "s": 12,
-                "zorder": 10,
-            }
-        else:
-            _runway_data_kwargs = runway_data_kwargs
-        if dist_data_kwargs is None:
-            _dist_data_kwargs = {
-                "marker": "o",
-                "c": "magenta",
-                "s": 3,
-                "zorder": 5,
-            }
-        else:
-            _dist_data_kwargs = dist_data_kwargs
-        if dist_ctrl_kwargs is None:
-            _dist_ctrl_kwargs = {
-                "marker": "d",
-                "c": "orange",
-                "s": 3,
-                "zorder": 5,
-            }
-        else:
-            _dist_ctrl_kwargs = dist_ctrl_kwargs
+        _runway_data_kwargs = {
+            "marker": "*",
+            "c": "magenta",
+            "s": 12,
+            "zorder": 10,
+        }
+        if runway_data_kwargs is not None:
+            _runway_data_kwargs |= runway_data_kwargs
+        _dist_data_kwargs = {
+            "marker": "o",
+            "c": "magenta",
+            "s": 3,
+            "zorder": 5,
+        }
+        if dist_data_kwargs is not None:
+            _dist_data_kwargs |= dist_data_kwargs
+        _dist_ctrl_kwargs = {
+            "marker": "d",
+            "c": "orange",
+            "s": 3,
+            "zorder": 5,
+        }
+        if dist_ctrl_kwargs is not None:
+            _dist_ctrl_kwargs |= dist_ctrl_kwargs
         self.distribution_scaling = distribution_scaling
         self.distribution_xline = distribution_xline
         self.runway_end = runway_end
