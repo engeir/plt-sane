@@ -215,6 +215,9 @@ class FigureGrid:
                     transform=axes[-1].transAxes,
                     **kwargs,
                 )
+                axes[-1].yaxis.set_label_coords(
+                    self._pos[0] + 0.04, 0.5, transform=axes[-1].transAxes
+                )
         axes = self._maybe_columns_first(axes, transpose=False)
         return fig, axes
 
